@@ -1,4 +1,7 @@
-package pcd.assignment01.sequential;
+package pcd.assignment01.concurrent.model;
+
+import pcd.assignment01.concurrent.model.exception.InfiniteForceException;
+
 /*
  * This class represents a body
  * 
@@ -55,7 +58,7 @@ public class Body {
      * @param acc instant acceleration
      * @param dt time elapsed
      */
-    public void updateVelocity(V2d acc, double dt){    	
+    public void updateVelocity(V2d acc, double dt){
     	vel.sum(new V2d(acc).scalarMul(dt));
     }
     

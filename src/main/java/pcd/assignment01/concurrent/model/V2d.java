@@ -7,7 +7,9 @@
  * Use is subject to license terms.
  *
  */
-package pcd.assignment01.sequential;
+package pcd.assignment01.concurrent.model;
+
+import pcd.assignment01.concurrent.model.exception.NullVectorException;
 
 /**
  *

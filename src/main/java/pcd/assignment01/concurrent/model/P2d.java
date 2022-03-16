@@ -1,6 +1,6 @@
-package pcd.assignment01.sequential;
+package pcd.assignment01.concurrent.model;
 
-public class P2d { 
+public class P2d {
 
     private double x, y;
 

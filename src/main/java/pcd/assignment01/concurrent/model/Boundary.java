@@ -1,20 +1,21 @@
-package pcd.assignment01.sequential;
+package pcd.assignment01.concurrent.model;
 
 /**
  * Boundary of the field where bodies move. 
  *
  */
 public class Boundary {
+
 	private final double x0;
 	private final double y0;
 	private final double x1;
 	private final double y1;
 
 	public Boundary(double x0, double y0, double x1, double y1){
-		this.x0=x0;
-		this.y0=y0;
-		this.x1=x1;
-		this.y1=y1;
+		this.x0 = x0;
+		this.y0 = y0;
+		this.x1 = x1;
+		this.y1 = y1;
 	}
 
 	public double getX0(){
@@ -32,5 +33,4 @@ public class Boundary {
 	public double getY1(){
 		return y1;
 	}
-
 }
