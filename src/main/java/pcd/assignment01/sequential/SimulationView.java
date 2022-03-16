@@ -18,7 +18,7 @@ import javax.swing.*;
  */
 public class SimulationView {
         
-	private VisualiserFrame frame;
+	private final VisualiserFrame frame;
 	
     /**
      * Creates a view of the specified size (in pixels)
@@ -36,7 +36,7 @@ public class SimulationView {
     
     public static class VisualiserFrame extends JFrame {
 
-        private VisualiserPanel panel;
+        private final VisualiserPanel panel;
 
         public VisualiserFrame(int w, int h){
             setTitle("Bodies Simulation");
@@ -61,7 +61,7 @@ public class SimulationView {
 	        		panel.display(bodies, vt, iter, bounds);
 	            	repaint();
 	        	});
-        	} catch (Exception ex) {}
+        	} catch (Exception ignored) {}
         };
         
         public void updateScale(double k) {

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Simulator {
 
-	private SimulationView viewer;
+	private final SimulationView viewer;
 
 	/* bodies in the field */
 	ArrayList<Body> bodies;
@@ -44,9 +44,7 @@ public class Simulator {
 
 			/* update bodies velocity */
 
-			for (int i = 0; i < bodies.size(); i++) {
-				Body b = bodies.get(i);
-
+			for (Body b : bodies) {
 				/* compute total force on bodies */
 				V2d totalForce = computeTotalForceOnBody(b);
 
@@ -87,13 +85,12 @@ public class Simulator {
 
 		/* compute total repulsive force */
 
-		for (int j = 0; j < bodies.size(); j++) {
-			Body otherBody = bodies.get(j);
+		for (Body otherBody : bodies) {
 			if (!b.equals(otherBody)) {
 				try {
 					V2d forceByOtherBody = b.computeRepulsiveForceBy(otherBody);
 					totalForce.sum(forceByOtherBody);
-				} catch (Exception ex) {
+				} catch (Exception ignored) {
 				}
 			}
 		}
@@ -144,7 +141,4 @@ public class Simulator {
 			bodies.add(b);
 		}
 	}
-	
-	
-
 }
