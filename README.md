@@ -1,4 +1,10 @@
 # PCD Assignment 01
+## Development tools
+1. Intellij IDEA
+2. Java Path Finder
+3. Java 8 is needed to run JPF
+4. If you do not want to install Java 8 you can use this [Docker image](https://hub.docker.com/r/gianlucaaguzzi/pcd-jpf)
+
 ## Instructions to run project with Java Path Finder
 ### Create JPF file
 Create a file with .jpf extension with the following structure:
