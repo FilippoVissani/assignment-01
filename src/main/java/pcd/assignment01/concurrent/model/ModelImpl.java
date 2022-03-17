@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class ModelImpl implements Model{
     /* bodies in the field */
-    List<Body> bodies;
+    private List<Body> bodies;
     /* boundary of the field */
     private Boundary bounds;
     /* virtual time */
@@ -52,7 +52,7 @@ public class ModelImpl implements Model{
             /* compute total force on bodies */
             Vector2D totalForce = computeTotalForceOnBody(body);
             /* compute instant acceleration */
-            Vector2D acceleration = totalForce.scalarMul(1.0 / body.getMass());
+            Vector2D acceleration = totalForce.multiplyByScalar(1.0 / body.getMass());
             /* update velocity */
             body.updateSpeed(acceleration, timeStep);
         }

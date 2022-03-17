@@ -11,51 +11,72 @@ package pcd.assignment01.concurrent.model;
 
 import pcd.assignment01.concurrent.model.exception.NullVectorException;
 
+/**
+ * This class represents a 2D vector
+ */
 public class Vector2D {
 
     private final double x;
     private final double y;
 
+    /**
+     * @param x of the new Vector2D
+     * @param y of the new Vector2D
+     */
     public Vector2D(final double x, final double y){
         this.x = x;
         this.y = y;
     }
 
-    public Vector2D(final Vector2D v){
-        this.x = v.x;
-        this.y = v.y;
-    }
-
+    /**
+     * @param from Point2D that represent the start of the new Vector2D
+     * @param to Point2Dthat represent the end of the new Vector2D
+     */
     public Vector2D(final Point2D from, final Point2D to){
         this.x = to.getX() - from.getX();
         this.y = to.getY() - from.getY();
     }
 
-    public Vector2D scalarMul(final double k) {
+    /**
+     * @param k scalar by which the vector must be multiplied
+     * @return a new Vector2D
+     */
+    public Vector2D multiplyByScalar(final double k) {
         return new Vector2D(x * k, y * k);
     }
-    
+
+    /**
+     * @param v vector to sum
+     * @return new Vector2D
+     */
     public Vector2D sum(final Vector2D v) {
         return new Vector2D(x + v.x, y + v.y);
     }
-    
+
+    /**
+     * @return new normalized Vector2D starting from the current
+     * @throws NullVectorException
+     */
     public Vector2D normalize() throws NullVectorException {
-    	double mod =  Math.sqrt(x * x + y * y);
+    	double mod = Math.sqrt(x * x + y * y);
     	if (mod > 0) {
             return new Vector2D(x / mod, y / mod);
     	} else {
     		throw new NullVectorException();
     	}
-
     }
-    
+
+    /**
+     * @return x of the Vector2D
+     */
     public double getX() {
     	return x;
     }
 
+    /**
+     * @return y of the Vector2D
+     */
     public double getY() {
     	return y;
     }
-    
-    
 }

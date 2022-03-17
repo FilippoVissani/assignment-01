@@ -1,8 +1,7 @@
 package pcd.assignment01.concurrent.model;
 
 /**
- * Boundary of the field where bodies move. 
- *
+ * Boundary of the field where bodies move.
  */
 public class Boundary {
 
