@@ -57,13 +57,9 @@ public class ModelImpl implements Model{
             body.updateSpeed(acceleration, timeStep);
         }
         /* compute bodies new pos */
-        for (Body body : bodies) {
-            body.updatePosition(timeStep);
-        }
+        bodies.forEach(body -> body.updatePosition(timeStep));
         /* check collisions with boundaries */
-        for (Body body : bodies) {
-            body.checkAndSolveBoundaryCollision(bounds);
-        }
+        bodies.forEach(body -> body.checkAndSolveBoundaryCollision(bounds));
         /* update virtual time */
         virtualTime = virtualTime + timeStep;
     }
