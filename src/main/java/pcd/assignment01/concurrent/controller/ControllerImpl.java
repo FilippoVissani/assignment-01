@@ -7,20 +7,20 @@ public class ControllerImpl implements Controller{
     private final Model model;
     private final View view;
 
-    public ControllerImpl(Model model, View view) {
+    public ControllerImpl(final Model model, final View view) {
         this.model = model;
         this.view = view;
     }
 
     @Override
-    public void startSimulation(long nSteps) {
-        long iter = 0;
+    public void startSimulation(final long nSteps) {
+        long iteration = 0;
         /* simulation loop */
-        while (iter < nSteps) {
+        while (iteration < nSteps) {
             model.executeIteration();
             /* display current stage */
-            view.display(model.getBodies(), model.getVt(), iter, model.getBounds());
-            iter++;
+            view.display(model.getBodies(), model.getVirtualTime(), iteration, model.getBounds());
+            iteration++;
         }
     }
 }

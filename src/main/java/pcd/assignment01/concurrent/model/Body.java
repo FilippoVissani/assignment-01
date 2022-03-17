@@ -2,103 +2,67 @@ package pcd.assignment01.concurrent.model;
 
 import pcd.assignment01.concurrent.model.exception.InfiniteForceException;
 
-/*
- * This class represents a body
- * 
- */
 public class Body {
     
 	private static final double REPULSIVE_CONST = 0.01;
 	private static final double FRICTION_CONST = 1;
-	
-    private final P2d pos;
-    private final V2d vel;
+    private Point2D position;
+    private Vector2D speed;
     private final double mass;
     private final int id;
     
-    public Body(int id, P2d pos, V2d vel, double mass){
+    public Body(final int id, final Point2D position, final Vector2D speed, final double mass){
     	this.id = id;
-        this.pos = pos;
-        this.vel = vel;
+        this.position = position;
+        this.speed = speed;
         this.mass = mass;
     }
-    
+
+    public Point2D getPosition() {
+        return position;
+    }
+
+    public Vector2D getSpeed() {
+        return speed;
+    }
+
     public double getMass() {
-    	return mass;
-    }
-    
-    public P2d getPos(){
-        return pos;
+        return mass;
     }
 
-    public V2d getVel(){
-        return vel;
-    }
-    
     public int getId() {
-    	return id;
-    }
-    
-    public boolean equals(Object b) {
-    	return ((Body)b).id == id;
-    }
-    
-    
-    /**
-     * Update the position, according to current velocity
-     * 
-     * @param dt time elapsed 
-     */
-    public void updatePos(double dt){    	
-    	pos.sum(new V2d(vel).scalarMul(dt));
+        return id;
     }
 
-    /**
-     * Update the velocity, given the instant acceleration
-     * @param acc instant acceleration
-     * @param dt time elapsed
-     */
-    public void updateVelocity(V2d acc, double dt){
-    	vel.sum(new V2d(acc).scalarMul(dt));
+    public boolean equals(final Object body) {
+    	return ((Body)body).id == id;
     }
     
-    /**
-     * Change the velocity
-     * 
-     * @param vx
-     * @param vy
-     */
-    public void changeVel(double vx, double vy){
-    	vel.change(vx, vy);
-    }
-  	
-    /**
-     * Computes the distance from the specified body
-     * 
-     * @param b
-     * @return
-     */
-    public double getDistanceFrom(Body b) {
-    	double dx = pos.getX() - b.getPos().getX();
-    	double dy = pos.getY() - b.getPos().getY();
-    	return Math.sqrt(dx*dx + dy*dy);
+    public void updatePosition(final double dt){
+    	position = position.sum(speed.scalarMul(dt));
     }
     
-    /**
-     * 
-     * Compute the repulsive force exerted by another body
-     * 
-     * @param b
-     * @return
-     * @throws InfiniteForceException
-     */
-    public V2d computeRepulsiveForceBy(Body b) throws InfiniteForceException {
-		double dist = getDistanceFrom(b);
-		if (dist > 0) {
+    public void updateSpeed(final Vector2D acceleration, final double dt){
+    	speed = speed.sum(acceleration.scalarMul(dt));
+    }
+    
+    public void changeSpeed(final double vx, final double vy){
+    	speed = new Vector2D(vx, vy);
+    }
+    
+    public double getDistanceFrom(final Body body) {
+    	double dx = position.getX() - body.getPosition().getX();
+    	double dy = position.getY() - body.getPosition().getY();
+    	return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    public Vector2D computeRepulsiveForceBy(final Body body) throws InfiniteForceException {
+		double distance = getDistanceFrom(body);
+		if (distance > 0) {
 			try {
-				return new V2d(b.getPos(), pos)
-					.normalize()
-					.scalarMul(b.getMass()*REPULSIVE_CONST/(dist*dist));
+				return new Vector2D(body.getPosition(), position)
+                        .normalize()
+                        .scalarMul(body.getMass() * REPULSIVE_CONST / (distance * distance));
 			} catch (Exception ex) {
 				throw new InfiniteForceException();
 			}
@@ -107,37 +71,25 @@ public class Body {
 		}
     }
     
-    /**
-     * 
-     * Compute current friction force, given the current velocity
-     */
-    public V2d getCurrentFrictionForce() {
-        return new V2d(vel).scalarMul(-FRICTION_CONST);
+    public Vector2D getCurrentFrictionForce() {
+        return speed.scalarMul(-FRICTION_CONST);
     }
     
-    /**
-     * Check if there collisions with the boundaty and update the
-     * position and velocity accordingly
-     * 
-     * @param bounds
-     */
-    public void checkAndSolveBoundaryCollision(Boundary bounds){
-    	double x = pos.getX();
-    	double y = pos.getY();    	
+    public void checkAndSolveBoundaryCollision(final Boundary bounds){
+    	final double x = position.getX();
+        final double y = position.getY();
         if (x > bounds.getX1()){
-            pos.change(bounds.getX1(), pos.getY());
-            vel.change(-vel.getX(), vel.getY());
+            position = new Point2D(bounds.getX1(), position.getY());
+            speed = new Vector2D(-speed.getX(), speed.getY());
         } else if (x < bounds.getX0()){
-            pos.change(bounds.getX0(), pos.getY());
-            vel.change(-vel.getX(), vel.getY());
+            position = new Point2D(bounds.getX0(), position.getY());
+            speed = new Vector2D(-speed.getX(), speed.getY());
         } else if (y > bounds.getY1()){
-            pos.change(pos.getX(), bounds.getY1());
-            vel.change(vel.getX(), -vel.getY());
+            position = new Point2D(position.getX(), bounds.getY1());
+            speed = new Vector2D(speed.getX(), -speed.getY());
         } else if (y < bounds.getY0()){
-            pos.change(pos.getX(), bounds.getY0());
-            vel.change(vel.getX(), -vel.getY());
+            position = new Point2D(position.getX(), bounds.getY0());
+            speed = new Vector2D(speed.getX(), -speed.getY());
         }
-    }        
-    
-
+    }
 }

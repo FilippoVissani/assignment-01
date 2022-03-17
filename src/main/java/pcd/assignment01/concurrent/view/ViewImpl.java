@@ -2,7 +2,7 @@ package pcd.assignment01.concurrent.view;
 
 import pcd.assignment01.concurrent.model.Body;
 import pcd.assignment01.concurrent.model.Boundary;
-import pcd.assignment01.concurrent.model.P2d;
+import pcd.assignment01.concurrent.model.Point2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,7 +102,7 @@ public class ViewImpl implements View{
                 g2.drawRect(x0, y0 - ht, wd, ht);
 
                 bodies.forEach( b -> {
-                    P2d p = b.getPos();
+                    Point2D p = b.getPosition();
                     int radius = (int) (10*scale);
                     if (radius < 1) {
                         radius = 1;

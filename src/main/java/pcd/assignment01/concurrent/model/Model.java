@@ -9,7 +9,7 @@ public interface Model {
 
     Boundary getBounds();
 
-    double getVt();
+    double getVirtualTime();
 
-    double getDt();
+    double getTimeStep();
 }
