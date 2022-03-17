@@ -1,4 +1,14 @@
 # PCD Assignment 01
+## Description
+The purpose of the assignment is to create a simulator for the movement of N bodies on a two-dimensional plane, which are subjected to two types of forces:
+- A repulsive force, whereby every body `bi` exerts on every other body `bj` a force in module equal to `Fij = krep * mi / (dij)^2` where:
+  * `mi` is the mass of the body `bi`
+  * `krep` is a given constant
+  * `dij` is the distance between the two bodies.
+
+The direction of the force is given by the unit vector `(bj - bi)`, therefore it repels the body `bj`.
+- A frictional force, whereby on every body `bi` moving at a speed `vi` a force `FRi = - kfri * vi` is exerted which opposes the motion, therefore in the opposite direction to its speed, where `kfri` is a given constant.
+
 ## Development tools
 1. Intellij IDEA
 2. Java Path Finder
