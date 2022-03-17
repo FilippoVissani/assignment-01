@@ -2,7 +2,8 @@ package pcd.assignment01.concurrent.model;
 
 public class P2d {
 
-    private double x, y;
+    private double x;
+    private double y;
 
     public P2d(double x,double y){
         this.x = x;
