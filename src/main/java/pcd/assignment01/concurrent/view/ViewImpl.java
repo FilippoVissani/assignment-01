@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ViewImpl implements View{
 
@@ -21,7 +21,7 @@ public class ViewImpl implements View{
     }
 
     @Override
-    public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
+    public void display(java.util.List<Body> bodies, double vt, long iter, Boundary bounds){
         frame.display(bodies, vt, iter, bounds);
     }
 
@@ -46,7 +46,7 @@ public class ViewImpl implements View{
             this.setVisible(true);
         }
 
-        public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
+        public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
             try {
                 SwingUtilities.invokeAndWait(() -> {
                     panel.display(bodies, vt, iter, bounds);
@@ -62,7 +62,7 @@ public class ViewImpl implements View{
 
     public static class VisualiserPanel extends JPanel implements KeyListener {
 
-        private ArrayList<Body> bodies;
+        private List<Body> bodies;
         private Boundary bounds;
 
         private long nIter;
@@ -122,7 +122,7 @@ public class ViewImpl implements View{
             return (int)(dy - y*dy*scale);
         }
 
-        public void display(ArrayList<Body> bodies, double vt, long iter, Boundary bounds){
+        public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
             this.bodies = bodies;
             this.bounds = bounds;
             this.vt = vt;

@@ -1,11 +1,12 @@
 package pcd.assignment01.concurrent.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ModelImpl implements Model{
     /* bodies in the field */
-    ArrayList<Body> bodies;
+    List<Body> bodies;
     /* boundary of the field */
     private Boundary bounds;
     /* virtual time */
@@ -25,7 +26,7 @@ public class ModelImpl implements Model{
     }
 
     @Override
-    public ArrayList<Body> getBodies() {
+    public List<Body> getBodies() {
         return bodies;
     }
 

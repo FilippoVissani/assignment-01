@@ -1,11 +1,19 @@
 package pcd.assignment01.concurrent.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface Model {
+
+    /**
+     * Executes an iteration of the simulation
+     */
     void executeIteration();
 
-    ArrayList<Body> getBodies();
+    /**
+     *
+     * @return a list containing the bodies
+     */
+    List<Body> getBodies();
 
     Boundary getBounds();
 
