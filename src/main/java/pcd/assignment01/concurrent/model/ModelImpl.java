@@ -19,9 +19,6 @@ public class ModelImpl implements Model{
         virtualTime = 0;
         timeStep = 0.001;
         /* initializing boundary and bodies */
-        // testBodySetTwoBodies();
-        // testBodySetThreeBodies();
-        // testBodySetSomeBodies();
         testBodySetManyBodies();
     }
 
@@ -83,14 +80,14 @@ public class ModelImpl implements Model{
 
     private void testBodySetTwoBodies() {
         bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
-        bodies = new ArrayList<Body>();
+        bodies = new ArrayList<>();
         bodies.add(new Body(0, new Point2D(-0.1, 0), new Vector2D(0,0), 1));
         bodies.add(new Body(1, new Point2D(0.1, 0), new Vector2D(0,0), 2));
     }
 
     private void testBodySetThreeBodies() {
         bounds = new Boundary(-1.0, -1.0, 1.0, 1.0);
-        bodies = new ArrayList<Body>();
+        bodies = new ArrayList<>();
         bodies.add(new Body(0, new Point2D(0, 0), new Vector2D(0,0), 10));
         bodies.add(new Body(1, new Point2D(0.2, 0), new Vector2D(0,0), 1));
         bodies.add(new Body(2, new Point2D(-0.2, 0), new Vector2D(0,0), 1));
@@ -99,19 +96,16 @@ public class ModelImpl implements Model{
     private void testBodySetSomeBodies() {
         bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
         int nBodies = 100;
-        Random rand = new Random(System.currentTimeMillis());
-        bodies = new ArrayList<Body>();
-        for (int i = 0; i < nBodies; i++) {
-            double x = bounds.getX0() * 0.25 + rand.nextDouble() * (bounds.getX1() - bounds.getX0()) * 0.25;
-            double y = bounds.getY0() * 0.25 + rand.nextDouble() * (bounds.getY1() - bounds.getY0()) * 0.25;
-            Body b = new Body(i, new Point2D(x, y), new Vector2D(0, 0), 10);
-            bodies.add(b);
-        }
+        generateBodies(nBodies);
     }
 
     private void testBodySetManyBodies() {
         bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
         int nBodies = 1000;
+        generateBodies(nBodies);
+    }
+
+    private void generateBodies(int nBodies) {
         Random rand = new Random(System.currentTimeMillis());
         bodies = new ArrayList<>();
         for (int i = 0; i < nBodies; i++) {
