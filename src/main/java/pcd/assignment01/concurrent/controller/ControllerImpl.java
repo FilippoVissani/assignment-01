@@ -5,10 +5,14 @@ import pcd.assignment01.concurrent.view.View;
 
 public class ControllerImpl implements Controller{
     private final Model model;
-    private final View view;
+    private View view;
 
-    public ControllerImpl(final Model model, final View view) {
+    public ControllerImpl(final Model model) {
         this.model = model;
+    }
+
+    @Override
+    public void setView(View view) {
         this.view = view;
     }
 

@@ -1,4 +1,6 @@
-package pcd.assignment01.concurrent.model;
+package pcd.assignment01.concurrent.common;
+
+import pcd.assignment01.concurrent.model.Vector2D;
 
 /**
  * This class represents a 2D point

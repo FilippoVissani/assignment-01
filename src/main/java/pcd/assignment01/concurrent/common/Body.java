@@ -1,5 +1,6 @@
-package pcd.assignment01.concurrent.model;
+package pcd.assignment01.concurrent.common;
 
+import pcd.assignment01.concurrent.model.Vector2D;
 import pcd.assignment01.concurrent.model.exception.InfiniteForceException;
 
 public class Body {

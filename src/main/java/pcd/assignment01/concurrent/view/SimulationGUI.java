@@ -1,9 +1,8 @@
 package pcd.assignment01.concurrent.view;
 
-import pcd.assignment01.concurrent.model.Body;
-import pcd.assignment01.concurrent.model.Boundary;
-import pcd.assignment01.concurrent.model.Point2D;
-
+import pcd.assignment01.concurrent.common.Body;
+import pcd.assignment01.concurrent.common.Boundary;
+import pcd.assignment01.concurrent.common.Point2D;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,55 +11,41 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
-public class ViewImpl implements View{
+public class SimulationGUI extends JFrame{
 
-    private final VisualiserFrame frame;
+    private final SimulationPanel panel;
 
-    public ViewImpl(int w, int h){
-        frame = new VisualiserFrame(w,h);
+    public SimulationGUI(int w, int h){
+        setTitle("Bodies Simulation");
+        setSize(w,h);
+        setResizable(false);
+        panel = new SimulationPanel(w,h);
+        getContentPane().add(panel);
+        addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent ev){
+                System.exit(-1);
+            }
+            public void windowClosed(WindowEvent ev){
+                System.exit(-1);
+            }
+        });
+        this.setVisible(true);
     }
 
-    @Override
-    public void display(java.util.List<Body> bodies, double vt, long iter, Boundary bounds){
-        frame.display(bodies, vt, iter, bounds);
-    }
-
-    public static class VisualiserFrame extends JFrame {
-
-        private final VisualiserPanel panel;
-
-        public VisualiserFrame(int w, int h){
-            setTitle("Bodies Simulation");
-            setSize(w,h);
-            setResizable(false);
-            panel = new VisualiserPanel(w,h);
-            getContentPane().add(panel);
-            addWindowListener(new WindowAdapter(){
-                public void windowClosing(WindowEvent ev){
-                    System.exit(-1);
-                }
-                public void windowClosed(WindowEvent ev){
-                    System.exit(-1);
-                }
+    public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                panel.display(bodies, vt, iter, bounds);
+                repaint();
             });
-            this.setVisible(true);
-        }
+        } catch (Exception ignored) {}
+    };
 
-        public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
-            try {
-                SwingUtilities.invokeAndWait(() -> {
-                    panel.display(bodies, vt, iter, bounds);
-                    repaint();
-                });
-            } catch (Exception ignored) {}
-        };
-
-        public void updateScale(double k) {
-            panel.updateScale(k);
-        }
+    public void updateScale(double k) {
+        panel.updateScale(k);
     }
 
-    public static class VisualiserPanel extends JPanel implements KeyListener {
+    public static class SimulationPanel extends JPanel implements KeyListener {
 
         private List<Body> bodies;
         private Boundary bounds;
@@ -72,7 +57,7 @@ public class ViewImpl implements View{
         private long dx;
         private long dy;
 
-        public VisualiserPanel(int w, int h){
+        public SimulationPanel(int w, int h){
             setSize(w,h);
             dx = w/2 - 20;
             dy = h/2 - 20;

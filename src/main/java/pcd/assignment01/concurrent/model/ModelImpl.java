@@ -1,5 +1,9 @@
 package pcd.assignment01.concurrent.model;
 
+import pcd.assignment01.concurrent.common.Body;
+import pcd.assignment01.concurrent.common.Boundary;
+import pcd.assignment01.concurrent.common.Point2D;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
