@@ -120,7 +120,8 @@ public class Body {
         } else if (x < bounds.getX0()){
             position = new Point2D(bounds.getX0(), position.getY());
             speed = new Vector2D(-speed.getX(), speed.getY());
-        } else if (y > bounds.getY1()){
+        }
+        if (y > bounds.getY1()){
             position = new Point2D(position.getX(), bounds.getY1());
             speed = new Vector2D(speed.getX(), -speed.getY());
         } else if (y < bounds.getY0()){
