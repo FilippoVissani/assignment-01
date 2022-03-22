@@ -20,8 +20,7 @@ public class WorkerManager {
 
     public double getSpeedup(){
         if (this.speedup.isEmpty()){
-            return 0;
-            //throw new IllegalStateException("Speedup is not set");
+            throw new IllegalStateException("Speedup is not set");
         }
         return speedup.get();
     }
