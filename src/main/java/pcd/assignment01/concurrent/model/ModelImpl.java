@@ -23,31 +23,31 @@ public class ModelImpl implements Model{
         virtualTime = 0;
         timeStep = 0.001;
         /* initializing boundary and bodies */
-        testBodySetManyBodies();
+        generateBodies(100);
     }
 
     @Override
-    public List<Point2D> getBodiesPositions() {
+    public synchronized List<Point2D> getBodiesPositions() {
         return bodies.stream().map(Body::getPosition).collect(Collectors.toList());
     }
 
     @Override
-    public Boundary getBounds() {
+    public synchronized Boundary getBounds() {
         return bounds;
     }
 
     @Override
-    public double getVirtualTime() {
+    public synchronized double getVirtualTime() {
         return virtualTime;
     }
 
     @Override
-    public double getTimeStep() {
+    public synchronized double getTimeStep() {
         return timeStep;
     }
 
     @Override
-    public void executeIteration() {
+    public synchronized void executeIteration() {
         /* update bodies velocity */
         for (Body body : bodies) {
             /* compute total force on bodies */
@@ -82,34 +82,8 @@ public class ModelImpl implements Model{
         return totalForce;
     }
 
-    private void testBodySetTwoBodies() {
-        bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
-        bodies = new ArrayList<>();
-        bodies.add(new Body(0, new Point2D(-0.1, 0), new Vector2D(0,0), 1));
-        bodies.add(new Body(1, new Point2D(0.1, 0), new Vector2D(0,0), 2));
-    }
-
-    private void testBodySetThreeBodies() {
-        bounds = new Boundary(-1.0, -1.0, 1.0, 1.0);
-        bodies = new ArrayList<>();
-        bodies.add(new Body(0, new Point2D(0, 0), new Vector2D(0,0), 10));
-        bodies.add(new Body(1, new Point2D(0.2, 0), new Vector2D(0,0), 1));
-        bodies.add(new Body(2, new Point2D(-0.2, 0), new Vector2D(0,0), 1));
-    }
-
-    private void testBodySetSomeBodies() {
-        bounds = new Boundary(-4.0, -4.0, 4.0, 4.0);
-        int nBodies = 100;
-        generateBodies(nBodies);
-    }
-
-    private void testBodySetManyBodies() {
-        bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
-        int nBodies = 1000;
-        generateBodies(nBodies);
-    }
-
     private void generateBodies(int nBodies) {
+        bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
         Random rand = new Random(System.currentTimeMillis());
         bodies = new ArrayList<>();
         for (int i = 0; i < nBodies; i++) {
