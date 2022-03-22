@@ -23,7 +23,7 @@ public class ControllerImpl implements Controller{
         while (iteration < nSteps) {
             model.executeIteration();
             /* display current stage */
-            view.display(model.getBodies(), model.getVirtualTime(), iteration, model.getBounds());
+            view.display(model.getBodiesPositions(), model.getVirtualTime(), iteration, model.getBounds());
             iteration++;
         }
     }

@@ -1,12 +1,12 @@
 package pcd.assignment01.concurrent.model;
 
-import pcd.assignment01.concurrent.util.Body;
 import pcd.assignment01.concurrent.util.Boundary;
 import pcd.assignment01.concurrent.util.Point2D;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class ModelImpl implements Model{
     /* bodies in the field */
@@ -16,7 +16,7 @@ public class ModelImpl implements Model{
     /* virtual time */
     private double virtualTime;
     /* virtual time step */
-    double timeStep;
+    final double timeStep;
 
     public ModelImpl() {
         /* init virtual time */
@@ -27,8 +27,8 @@ public class ModelImpl implements Model{
     }
 
     @Override
-    public List<Body> getBodies() {
-        return bodies;
+    public List<Point2D> getBodiesPositions() {
+        return bodies.stream().map(Body::getPosition).collect(Collectors.toList());
     }
 
     @Override
