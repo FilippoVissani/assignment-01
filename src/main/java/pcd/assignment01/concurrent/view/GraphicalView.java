@@ -1,8 +1,8 @@
 package pcd.assignment01.concurrent.view;
 
 import pcd.assignment01.concurrent.controller.Controller;
-import pcd.assignment01.concurrent.common.Body;
-import pcd.assignment01.concurrent.common.Boundary;
+import pcd.assignment01.concurrent.util.Body;
+import pcd.assignment01.concurrent.util.Boundary;
 
 public class GraphicalView implements View {
 

@@ -1,7 +1,7 @@
 package pcd.assignment01.concurrent.model;
 
-import pcd.assignment01.concurrent.common.Body;
-import pcd.assignment01.concurrent.common.Boundary;
+import pcd.assignment01.concurrent.util.Body;
+import pcd.assignment01.concurrent.util.Boundary;
 
 import java.util.List;
 

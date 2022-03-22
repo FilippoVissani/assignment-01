@@ -9,7 +9,7 @@
  */
 package pcd.assignment01.concurrent.model;
 
-import pcd.assignment01.concurrent.common.Point2D;
+import pcd.assignment01.concurrent.util.Point2D;
 import pcd.assignment01.concurrent.model.exception.NullVectorException;
 
 /**

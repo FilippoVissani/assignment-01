@@ -1,4 +1,4 @@
-package pcd.assignment01.concurrent.common;
+package pcd.assignment01.concurrent.util;
 
 import pcd.assignment01.concurrent.model.Vector2D;
 

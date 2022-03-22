@@ -1,4 +1,4 @@
-package pcd.assignment01.concurrent.common;
+package pcd.assignment01.concurrent.util;
 
 /**
  * Boundary of the field where bodies move.

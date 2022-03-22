@@ -1,8 +1,8 @@
 package pcd.assignment01.concurrent.view;
 
-import pcd.assignment01.concurrent.common.Body;
-import pcd.assignment01.concurrent.common.Boundary;
-import pcd.assignment01.concurrent.common.Point2D;
+import pcd.assignment01.concurrent.util.Body;
+import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Point2D;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
