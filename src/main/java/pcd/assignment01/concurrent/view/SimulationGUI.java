@@ -1,6 +1,5 @@
 package pcd.assignment01.concurrent.view;
 
-import pcd.assignment01.concurrent.util.Body;
 import pcd.assignment01.concurrent.util.Boundary;
 import pcd.assignment01.concurrent.util.Point2D;
 import javax.swing.*;
@@ -32,14 +31,14 @@ public class SimulationGUI extends JFrame{
         this.setVisible(true);
     }
 
-    public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
+    public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
         try {
             SwingUtilities.invokeAndWait(() -> {
-                panel.display(bodies, vt, iter, bounds);
+                panel.display(bodiesPositions, vt, iter, bounds);
                 repaint();
             });
         } catch (Exception ignored) {}
-    };
+    }
 
     public void updateScale(double k) {
         panel.updateScale(k);
@@ -47,15 +46,13 @@ public class SimulationGUI extends JFrame{
 
     public static class SimulationPanel extends JPanel implements KeyListener {
 
-        private List<Body> bodies;
+        private List<Point2D> bodiesPositions;
         private Boundary bounds;
-
         private long nIter;
         private double vt;
         private double scale = 1;
-
-        private long dx;
-        private long dy;
+        private final long dx;
+        private final long dy;
 
         public SimulationPanel(int w, int h){
             setSize(w,h);
@@ -68,7 +65,7 @@ public class SimulationGUI extends JFrame{
         }
 
         public void paint(Graphics g){
-            if (bodies != null) {
+            if (bodiesPositions != null) {
                 Graphics2D g2 = (Graphics2D) g;
 
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -86,16 +83,15 @@ public class SimulationGUI extends JFrame{
 
                 g2.drawRect(x0, y0 - ht, wd, ht);
 
-                bodies.forEach( b -> {
-                    Point2D p = b.getPosition();
+                bodiesPositions.forEach(position -> {
                     int radius = (int) (10*scale);
                     if (radius < 1) {
                         radius = 1;
                     }
-                    g2.drawOval(getXcoord(p.getX()),getYcoord(p.getY()), radius, radius);
+                    g2.drawOval(getXcoord(position.getX()),getYcoord(position.getY()), radius, radius);
                 });
                 String time = String.format("%.2f", vt);
-                g2.drawString("Bodies: " + bodies.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);
+                g2.drawString("Bodies: " + bodiesPositions.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);
             }
         }
 
@@ -107,8 +103,8 @@ public class SimulationGUI extends JFrame{
             return (int)(dy - y*dy*scale);
         }
 
-        public void display(List<Body> bodies, double vt, long iter, Boundary bounds){
-            this.bodies = bodies;
+        public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
+            this.bodiesPositions = bodiesPositions;
             this.bounds = bounds;
             this.vt = vt;
             this.nIter = iter;

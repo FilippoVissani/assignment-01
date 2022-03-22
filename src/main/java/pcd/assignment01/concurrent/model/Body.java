@@ -1,7 +1,8 @@
-package pcd.assignment01.concurrent.util;
+package pcd.assignment01.concurrent.model;
 
-import pcd.assignment01.concurrent.model.Vector2D;
 import pcd.assignment01.concurrent.model.exception.InfiniteForceException;
+import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Point2D;
 
 public class Body {
     
@@ -65,7 +66,7 @@ public class Body {
     }
 
     /**
-     * @param acceleration
+     * @param acceleration acceleration
      * @param dt to be multiplied by acceleration and added to speed
      */
     public void updateSpeed(final Vector2D acceleration, final double dt){

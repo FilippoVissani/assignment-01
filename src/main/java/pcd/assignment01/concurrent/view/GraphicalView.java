@@ -1,8 +1,10 @@
 package pcd.assignment01.concurrent.view;
 
 import pcd.assignment01.concurrent.controller.Controller;
-import pcd.assignment01.concurrent.util.Body;
 import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Point2D;
+
+import java.util.List;
 
 public class GraphicalView implements View {
 
@@ -15,7 +17,7 @@ public class GraphicalView implements View {
     }
 
     @Override
-    public void display(java.util.List<Body> bodies, double vt, long iter, Boundary bounds){
-        frame.display(bodies, vt, iter, bounds);
+    public void display(List<Point2D> bodiesPositions, double virtualTime, long currentIteration, Boundary bounds) {
+        frame.display(bodiesPositions, virtualTime, currentIteration, bounds);
     }
 }

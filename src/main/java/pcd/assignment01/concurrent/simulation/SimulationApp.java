@@ -10,6 +10,6 @@ public class SimulationApp {
         ControllerImpl controller = new ControllerImpl(model);
         GraphicalView view = new GraphicalView(controller, 620,620);
         controller.setView(view);
-        controller.startSimulation(50000);
+        controller.startSimulation(1000);
     }
 }

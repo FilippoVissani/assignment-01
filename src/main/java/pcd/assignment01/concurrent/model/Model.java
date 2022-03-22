@@ -1,7 +1,7 @@
 package pcd.assignment01.concurrent.model;
 
-import pcd.assignment01.concurrent.util.Body;
 import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Point2D;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public interface Model {
     /**
      * @return a list containing the bodies
      */
-    List<Body> getBodies();
+    List<Point2D> getBodiesPositions();
 
     /**
      * @return the boundary of the field where bodies move

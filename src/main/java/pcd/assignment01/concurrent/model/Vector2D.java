@@ -31,7 +31,7 @@ public class Vector2D {
 
     /**
      * @param from Point2D that represent the start of the new Vector2D
-     * @param to Point2Dthat represent the end of the new Vector2D
+     * @param to Point2D that represent the end of the new Vector2D
      */
     public Vector2D(final Point2D from, final Point2D to){
         this.x = to.getX() - from.getX();
