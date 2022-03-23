@@ -1,30 +1,9 @@
 package pcd.assignment01.concurrent.controller;
 
-public class Chronometer {
+public interface Chronometer {
+    void start();
 
-	private boolean running;
-	private long startTime;
+    void stop();
 
-	public Chronometer(){
-		running = false;
-		startTime = 0;
-	}
-	
-	public void start(){
-		running = true;
-		startTime = System.currentTimeMillis();
-	}
-	
-	public void stop(){
-		startTime = getTime();
-		running = false;
-	}
-	
-	public long getTime(){
-		if (running){
-			return 	System.currentTimeMillis() - startTime;
-		} else {
-			return startTime;
-		}
-	}
+    long getTime();
 }
