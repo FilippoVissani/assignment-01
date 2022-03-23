@@ -19,7 +19,7 @@ The direction of the force is given by the unit vector `(bj - bi)`, therefore it
 ### Create JPF file
 Create a file with .jpf extension with the following structure:
 ```
-target = package.class
+target = com.example.MainClassName
 
 classpath = path/to/build/main
 
