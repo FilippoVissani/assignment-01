@@ -1,27 +1,9 @@
 package pcd.assignment01.concurrent.controller;
 
-import java.util.Optional;
+public interface WorkerManager {
+    int getWorkersNumber();
 
-public class WorkerManager {
-    private final int workersNumber;
-    private Optional<Double> speedup = Optional.empty();
+    void startWorkers();
 
-    public WorkerManager() {
-        this.workersNumber = Runtime.getRuntime().availableProcessors() + 1;
-    }
-
-    public WorkerManager(int workersNumber) {
-        this.workersNumber = workersNumber;
-    }
-
-    public int getWorkersNumber() {
-        return this.workersNumber;
-    }
-
-    public double getSpeedup(){
-        if (this.speedup.isEmpty()){
-            throw new IllegalStateException("Speedup is not set");
-        }
-        return speedup.get();
-    }
+    void joinWorkers();
 }
