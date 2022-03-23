@@ -4,18 +4,16 @@ import pcd.assignment01.concurrent.model.Model;
 import pcd.assignment01.concurrent.util.Logger;
 import pcd.assignment01.concurrent.view.View;
 
-import java.io.FileNotFoundException;
-
 public class ControllerImpl implements Controller{
     private final Model model;
     private final Chronometer chronometer;
     private View view;
-    private final WorkerManager workerManager;
+    private final SimulationManager simulationManager;
 
     public ControllerImpl(final Model model) {
         this.model = model;
-        this.chronometer = new Chronometer();
-        this.workerManager = new WorkerManager();
+        this.chronometer = new ChronometerImpl();
+        this.simulationManager = new SimulationManagerImpl(model, this);
     }
 
     @Override
@@ -24,26 +22,21 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void startSimulation(final long nSteps) {
-        long iteration = 0;
+    public void updateView(long currentIteration){
+        view.display(model.getBodiesPositions(), model.getVirtualTime(), currentIteration, model.getBounds());
+    }
+
+    @Override
+    public void startSimulationLoop(long nSteps) {
+        Logger.logProgramStarted();
         this.chronometer.start();
-        /* simulation loop */
-        while (iteration < nSteps) {
-            model.executeIteration();
-            /* display current stage */
-            //view.display(model.getBodiesPositions(), model.getVirtualTime(), iteration, model.getBounds());
-            iteration++;
-        }
+        this.simulationManager.startNewSimulation(nSteps);
         this.chronometer.stop();
-        try {
-            Logger.logSimulationResult(model.getBodiesPositions().size(),
-                    nSteps,
-                    this.workerManager.getSpeedup(),
-                    this.chronometer.getTime(),
-                    this.workerManager.getWorkersNumber());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println("PROGRAM TERMINATED");
+        Logger.logSimulationResult(model.getBodiesPositions().size(),
+                nSteps,
+                this.simulationManager.getSpeedup(),
+                this.chronometer.getTime(),
+                this.simulationManager.getWorkersNumber());
+        Logger.logProgramTerminated();
     }
 }
