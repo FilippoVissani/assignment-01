@@ -27,7 +27,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void startSimulationLoop(long nSteps) {
+    public void startSimulation(long nSteps) {
         Logger.logProgramStarted();
         this.chronometer.start();
         this.simulationManager.startNewSimulation(nSteps);

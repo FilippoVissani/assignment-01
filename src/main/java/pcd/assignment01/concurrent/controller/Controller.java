@@ -6,5 +6,5 @@ public interface Controller extends ViewController {
 
     void setView(View view);
 
-    void startSimulationLoop(long nSteps);
+    void startSimulation(long nSteps);
 }
