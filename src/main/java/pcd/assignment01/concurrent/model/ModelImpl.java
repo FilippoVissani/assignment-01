@@ -2,72 +2,83 @@ package pcd.assignment01.concurrent.model;
 
 import pcd.assignment01.concurrent.util.Boundary;
 import pcd.assignment01.concurrent.util.Point2D;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ModelImpl implements Model{
-    /* bodies in the field */
     private List<Body> bodies;
-    /* boundary of the field */
     private Boundary bounds;
-    /* virtual time */
     private double virtualTime;
-    /* virtual time step */
     final double timeStep;
 
     public ModelImpl() {
-        /* init virtual time */
         virtualTime = 0;
         timeStep = 0.001;
-        /* initializing boundary and bodies */
         generateBodies(100);
     }
 
     @Override
-    public synchronized List<Point2D> getBodiesPositions() {
+    public List<Point2D> getBodiesPositions() {
         return bodies.stream().map(Body::getPosition).collect(Collectors.toList());
     }
 
     @Override
-    public synchronized Boundary getBounds() {
+    public Boundary getBounds() {
         return bounds;
     }
 
     @Override
-    public synchronized double getVirtualTime() {
+    public double getVirtualTime() {
         return virtualTime;
     }
 
     @Override
-    public synchronized double getTimeStep() {
+    public double getTimeStep() {
         return timeStep;
     }
 
-    @Override
+/*    @Override
     public synchronized void executeIteration() {
-        /* update bodies velocity */
         for (Body body : bodies) {
-            /* compute total force on bodies */
             Vector2D totalForce = computeTotalForceOnBody(body);
-            /* compute instant acceleration */
             Vector2D acceleration = totalForce.multiplyByScalar(1.0 / body.getMass());
-            /* update velocity */
             body.updateSpeed(acceleration, timeStep);
         }
-        /* compute bodies new pos */
         bodies.forEach(body -> body.updatePosition(timeStep));
-        /* check collisions with boundaries */
         bodies.forEach(body -> body.checkAndSolveBoundaryCollision(bounds));
-        /* update virtual time */
         virtualTime = virtualTime + timeStep;
+    }*/
+
+    @Override
+    public void checkAndSolveBoundaryCollisionOnBodiesRange(final Pair<Integer, Integer> range){
+        for(int i = range.getX(); i < range.getY(); i++){
+            this.bodies.get(i).checkAndSolveBoundaryCollision(bounds);
+        }
     }
 
-    private Vector2D computeTotalForceOnBody(final Body body) {
+    @Override
+    public void updatePositionOnBodiesRange(final Pair<Integer, Integer> range){
+        for(int i = range.getX(); i < range.getY(); i++){
+            this.bodies.get(i).updatePosition(timeStep);
+        }
+    }
+
+    @Override
+    public void updateSpeedOnBodiesRange(final Pair<Integer, Integer> range, final List<Vector2D> acceleration){
+        for(int i = range.getX(); i < range.getY(); i++){
+            this.bodies.get(i).updateSpeed(acceleration.get(i - range.getX()), timeStep);
+        }
+    }
+
+    @Override
+    public List<Vector2D> computeAccelerationOnBodiesRange(final Pair<Integer, Integer> range){
+        return this.bodies.subList(range.getX(), range.getY()).stream().map(this::computeAccelerationOnBody).collect(Collectors.toList());
+    }
+
+    private Vector2D computeAccelerationOnBody(final Body body) {
         Vector2D totalForce = new Vector2D(0, 0);
-        /* compute total repulsive force */
         for (Body otherBody : bodies) {
             if (!body.equals(otherBody)) {
                 try {
@@ -77,12 +88,11 @@ public class ModelImpl implements Model{
                 }
             }
         }
-        /* add friction force */
         totalForce = totalForce.sum(body.getCurrentFrictionForce());
-        return totalForce;
+        return totalForce.multiplyByScalar(1.0 / body.getMass());
     }
 
-    private void generateBodies(int nBodies) {
+    private void generateBodies(final int nBodies) {
         bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
         Random rand = new Random(System.currentTimeMillis());
         bodies = new ArrayList<>();

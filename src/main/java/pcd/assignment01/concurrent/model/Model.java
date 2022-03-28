@@ -8,11 +8,6 @@ import java.util.List;
 public interface Model {
 
     /**
-     * Executes an iteration of the simulation
-     */
-    void executeIteration();
-
-    /**
      * @return a list containing the bodies
      */
     List<Point2D> getBodiesPositions();
@@ -31,4 +26,12 @@ public interface Model {
      * @return the step used to increment the virtual time
      */
     double getTimeStep();
+
+    void checkAndSolveBoundaryCollisionOnBodiesRange(Pair<Integer, Integer> range);
+
+    void updatePositionOnBodiesRange(Pair<Integer, Integer> range);
+
+    void updateSpeedOnBodiesRange(Pair<Integer, Integer> range, List<Vector2D> acceleration);
+
+    List<Vector2D> computeAccelerationOnBodiesRange(Pair<Integer, Integer> range);
 }
