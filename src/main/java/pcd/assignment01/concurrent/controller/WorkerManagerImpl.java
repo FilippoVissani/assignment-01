@@ -1,19 +1,28 @@
 package pcd.assignment01.concurrent.controller;
 
+import pcd.assignment01.concurrent.model.Model;
+import pcd.assignment01.concurrent.model.Pair;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class WorkerManagerImpl implements WorkerManager {
     private final Set<Worker> workers;
 
-    public WorkerManagerImpl() {
-        this(Runtime.getRuntime().availableProcessors() + 1);
+    public WorkerManagerImpl(final Model model) {
+        this(Runtime.getRuntime().availableProcessors() + 1, model);
     }
 
-    public WorkerManagerImpl(int workersNumber) {
+    public WorkerManagerImpl(final int workersNumber, final Model model) {
+        List<Barrier> barrier = new ArrayList<>();
+        barrier.add(new BarrierImpl(workersNumber));
+        barrier.add(new BarrierImpl(workersNumber));
+        barrier.add(new BarrierImpl(workersNumber));
         this.workers = new HashSet<>();
-        for (int i = 0; i < workersNumber; i = i + 1){
-            this.workers.add(new Worker());
+        int range = model.getBodiesNumber() / workersNumber;
+        for (int i = 0; i < model.getBodiesNumber(); i = i + range){
+            this.workers.add(new Worker(barrier, model, new Pair<>(i, i + range)));
         }
     }
 
@@ -25,6 +34,11 @@ public class WorkerManagerImpl implements WorkerManager {
     @Override
     public void startWorkers() {
         workers.forEach(Thread::start);
+    }
+
+    @Override
+    public void waitTaskTerminated(){
+        //TODO
     }
 
     @Override

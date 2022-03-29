@@ -27,6 +27,10 @@ public interface Model {
      */
     double getTimeStep();
 
+    int getBodiesNumber();
+
+    void incrementVirtualTime();
+
     void checkAndSolveBoundaryCollisionOnBodiesRange(Pair<Integer, Integer> range);
 
     void updatePositionOnBodiesRange(Pair<Integer, Integer> range);

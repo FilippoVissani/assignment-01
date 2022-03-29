@@ -16,7 +16,7 @@ public class ModelImpl implements Model{
     public ModelImpl() {
         virtualTime = 0;
         timeStep = 0.001;
-        generateBodies(100);
+        generateBodies(85);
     }
 
     @Override
@@ -39,17 +39,15 @@ public class ModelImpl implements Model{
         return timeStep;
     }
 
-/*    @Override
-    public synchronized void executeIteration() {
-        for (Body body : bodies) {
-            Vector2D totalForce = computeTotalForceOnBody(body);
-            Vector2D acceleration = totalForce.multiplyByScalar(1.0 / body.getMass());
-            body.updateSpeed(acceleration, timeStep);
-        }
-        bodies.forEach(body -> body.updatePosition(timeStep));
-        bodies.forEach(body -> body.checkAndSolveBoundaryCollision(bounds));
-        virtualTime = virtualTime + timeStep;
-    }*/
+    @Override
+    public int getBodiesNumber(){
+        return this.bodies.size();
+    }
+
+    @Override
+    public void incrementVirtualTime(){
+        this.virtualTime = this.virtualTime + timeStep;
+    }
 
     @Override
     public void checkAndSolveBoundaryCollisionOnBodiesRange(final Pair<Integer, Integer> range){

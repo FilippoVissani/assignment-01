@@ -14,16 +14,17 @@ public class SimulationManagerImpl implements SimulationManager {
     public SimulationManagerImpl(final Model model, final ViewController controller) {
         this.model = model;
         this.controller = controller;
-        this.workerManager = new WorkerManagerImpl();
+        this.workerManager = new WorkerManagerImpl(model);
         this.speedup = Optional.empty();
     }
 
     @Override
     public double getSpeedup(){
-        if (this.speedup.isEmpty()){
+/*        if (this.speedup.isEmpty()){
             throw new IllegalStateException("First simulation not executed");
         }
-        return this.speedup.get();
+        return this.speedup.get();*/
+        return 0;
     }
 
     @Override
@@ -34,15 +35,13 @@ public class SimulationManagerImpl implements SimulationManager {
     @Override
     public void startNewSimulation(final long nSteps) {
         long iteration = 0;
-        /* simulation loop */
+        this.workerManager.startWorkers();
         while (iteration < nSteps) {
-            this.workerManager.startWorkers();
-            //TODO this.model.executeIteration(); deve essere eseguita nei worker
-            this.model.executeIteration();
-            this.workerManager.joinWorkers();
-            /* display current stage */
+            this.workerManager.waitTaskTerminated();
+            this.model.incrementVirtualTime();
             this.controller.updateView(iteration);
             iteration = iteration + 1;
         }
+        this.workerManager.joinWorkers();
     }
 }

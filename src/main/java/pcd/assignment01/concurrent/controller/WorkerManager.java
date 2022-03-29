@@ -5,5 +5,7 @@ public interface WorkerManager {
 
     void startWorkers();
 
+    void waitTaskTerminated();
+
     void joinWorkers();
 }

@@ -17,7 +17,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void setView(View view) {
+    public void setView(final View view) {
         this.view = view;
     }
 
