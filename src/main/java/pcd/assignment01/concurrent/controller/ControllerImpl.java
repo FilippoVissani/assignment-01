@@ -6,14 +6,12 @@ import pcd.assignment01.concurrent.view.View;
 
 public class ControllerImpl implements Controller{
     private final Model model;
-    private final Chronometer chronometer;
     private View view;
     private final SimulationManager simulationManager;
 
     public ControllerImpl(final Model model) {
         this.model = model;
-        this.chronometer = new ChronometerImpl();
-        this.simulationManager = new SimulationManagerImpl(model, this);
+        this.simulationManager = new SimulationManagerImpl(model, this, 1000);
     }
 
     @Override
@@ -29,14 +27,13 @@ public class ControllerImpl implements Controller{
     @Override
     public void startSimulation(long nSteps) {
         Logger.logProgramStarted();
-        this.chronometer.start();
-        this.simulationManager.startNewSimulation(nSteps);
-        this.chronometer.stop();
-        Logger.logSimulationResult(model.getBodiesPositions().size(),
+        Thread simulation = new Thread(this.simulationManager, "MASTERRRRRRRRRRRRRRRR");
+        simulation.start();
+/*        Logger.logSimulationResult(model.getBodiesPositions().size(),
                 nSteps,
                 this.simulationManager.getSpeedup(),
                 this.chronometer.getTime(),
                 this.simulationManager.getWorkersNumber());
-        Logger.logProgramTerminated();
+        Logger.logProgramTerminated();*/
     }
 }

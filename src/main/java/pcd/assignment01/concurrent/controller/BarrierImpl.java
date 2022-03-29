@@ -17,9 +17,11 @@ public class BarrierImpl implements Barrier {
         this.actualWorkers = this.actualWorkers + 1;
         if (this.actualWorkers == this.workersNumber) {
             this.exit = true;
+            System.out.println(Thread.currentThread().getName() + " NOTIFY");
             notifyAll();
         } else {
             while (this.actualWorkers < this.workersNumber && !this.exit) {
+                System.out.println(Thread.currentThread().getName() + " WAIT");
                 wait();
             }
         }

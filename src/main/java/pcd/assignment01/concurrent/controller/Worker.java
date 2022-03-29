@@ -10,31 +10,25 @@ public class Worker extends Thread {
     private final List<Barrier> barrier;
     private final Model model;
     private final Pair<Integer, Integer> range;
-    private boolean stop;
 
     public Worker(final List<Barrier> barrier, final Model model, final Pair<Integer, Integer> range) {
         this.barrier = barrier;
         this.model = model;
         this.range = range;
-        this.stop = false;
-    }
-
-    public synchronized void setStop(boolean stop){
-        this.stop = stop;
     }
 
     @Override
     public void run() {
         try {
-            while (!stop){
+            while (true){
+                this.barrier.get(3).hitAndWaitAll();
                 List<Vector2D> acceleration = model.computeAccelerationOnBodiesRange(range);
-                barrier.get(0).hitAndWaitAll();
-                model.updateSpeedOnBodiesRange(range, acceleration);
-                barrier.get(1).hitAndWaitAll();
-                model.updatePositionOnBodiesRange(range);
-                barrier.get(2).hitAndWaitAll();
-                model.checkAndSolveBoundaryCollisionOnBodiesRange(range);
-                wait();
+                this.barrier.get(0).hitAndWaitAll();
+                this.model.updateSpeedOnBodiesRange(range, acceleration);
+                this.barrier.get(1).hitAndWaitAll();
+                this.model.updatePositionOnBodiesRange(range);
+                this.barrier.get(2).hitAndWaitAll();
+                this.model.checkAndSolveBoundaryCollisionOnBodiesRange(range);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
