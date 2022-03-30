@@ -6,7 +6,6 @@ import pcd.assignment01.concurrent.util.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class ModelImpl implements Model{
     private List<Body> bodies;
@@ -17,12 +16,16 @@ public class ModelImpl implements Model{
     public ModelImpl() {
         virtualTime = 0;
         timeStep = 0.001;
-        generateBodies(10000);
+        generateBodies(1000);
     }
 
     @Override
     public List<Point2D> getBodiesPositions() {
-        return bodies.stream().map(Body::getPosition).collect(Collectors.toList());
+        List<Point2D> positions = new ArrayList<>();
+        for (Body body : bodies){
+            positions.add(body.getPosition());
+        }
+        return positions;
     }
 
     @Override
@@ -73,7 +76,11 @@ public class ModelImpl implements Model{
 
     @Override
     public List<Vector2D> computeAccelerationOnBodiesRange(final Pair<Integer, Integer> range){
-        return this.bodies.subList(range.getStart(), range.getStop()).stream().map(this::computeAccelerationOnBody).collect(Collectors.toList());
+        List<Vector2D> acceleration = new ArrayList<>();
+        for (Body body : bodies.subList(range.getStart(), range.getStop())){
+            acceleration.add(computeAccelerationOnBody(body));
+        }
+        return acceleration;
     }
 
     private Vector2D computeAccelerationOnBody(final Body body) {

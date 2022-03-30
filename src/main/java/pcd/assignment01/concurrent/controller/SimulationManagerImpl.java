@@ -48,7 +48,9 @@ public class SimulationManagerImpl implements SimulationManager {
     public void run() {
         Logger.logSimulationStarted();
         long iteration = 0;
-        workers.forEach(Thread::start);
+        for (Worker worker : workers){
+            worker.start();
+        }
         this.chronometer.start();
         while (iteration < stepNumber) {
             try {

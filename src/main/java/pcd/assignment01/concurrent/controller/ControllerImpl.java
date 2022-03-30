@@ -24,7 +24,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void startSimulation(long stepNumber) {
-        new Thread(this.simulationManager).start();
+    public void startSimulation() {
+        new Thread(this.simulationManager, "MASTER").start();
     }
 }

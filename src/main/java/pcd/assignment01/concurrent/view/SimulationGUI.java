@@ -33,10 +33,10 @@ public class SimulationGUI extends JFrame{
 
     public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
         try {
-            SwingUtilities.invokeLater(() -> {
+/*            SwingUtilities.invokeAndWait(() -> {
                 panel.display(bodiesPositions, vt, iter, bounds);
                 repaint();
-            });
+            });*/
         } catch (Exception ignored) {}
     }
 
@@ -83,13 +83,14 @@ public class SimulationGUI extends JFrame{
 
                 g2.drawRect(x0, y0 - ht, wd, ht);
 
-                bodiesPositions.forEach(position -> {
+                for (Point2D position : bodiesPositions){
                     int radius = (int) (10*scale);
                     if (radius < 1) {
                         radius = 1;
                     }
                     g2.drawOval(getXcoord(position.getX()),getYcoord(position.getY()), radius, radius);
-                });
+
+                }
                 String time = String.format("%.2f", vt);
                 g2.drawString("Bodies: " + bodiesPositions.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);
             }
