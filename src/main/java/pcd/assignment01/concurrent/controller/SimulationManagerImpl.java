@@ -14,7 +14,7 @@ public class SimulationManagerImpl implements SimulationManager {
     private final ViewController controller;
     private final long stepNumber;
     private final Chronometer chronometer;
-    private final Barrier barrier;
+    private final Pair<Barrier, Barrier> barrier;
 
     public SimulationManagerImpl(final Model model, final ViewController controller, final long stepNumber) {
         this.model = model;
@@ -22,14 +22,13 @@ public class SimulationManagerImpl implements SimulationManager {
         this.stepNumber = stepNumber;
         this.chronometer = new ChronometerImpl();
         int workersNumber = Runtime.getRuntime().availableProcessors() + 1;
-        //int workersNumber = 1;
         List<Barrier> barriers = new ArrayList<>();
-        this.barrier = new BarrierImpl(workersNumber + 1);
-        barriers.add(this.barrier);
+        this.barrier = new Pair<>(new BarrierImpl(workersNumber + 1), new BarrierImpl(workersNumber + 1));
+        barriers.add(barrier.getStart());
         barriers.add(new BarrierImpl(workersNumber));
         barriers.add(new BarrierImpl(workersNumber));
         barriers.add(new BarrierImpl(workersNumber));
-        barriers.add(new BarrierImpl(workersNumber));
+        barriers.add(barrier.getStop());
         this.workers = new HashSet<>();
         int range = model.getBodiesNumber() / workersNumber;
         int last = 0;
@@ -53,9 +52,10 @@ public class SimulationManagerImpl implements SimulationManager {
         this.chronometer.start();
         while (iteration < stepNumber) {
             try {
-                //this.controller.updateView(iteration);
-                this.barrier.hitAndWaitAll();
+                this.barrier.getStart().hitAndWaitAll();
+                this.barrier.getStop().hitAndWaitAll();
                 this.model.incrementVirtualTime();
+                //this.controller.updateView(iteration);
                 iteration = iteration + 1;
             } catch (InterruptedException e) {
                 e.printStackTrace();

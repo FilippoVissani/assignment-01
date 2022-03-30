@@ -33,7 +33,7 @@ public class SimulationGUI extends JFrame{
 
     public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
         try {
-            SwingUtilities.invokeAndWait(() -> {
+            SwingUtilities.invokeLater(() -> {
                 panel.display(bodiesPositions, vt, iter, bounds);
                 repaint();
             });
