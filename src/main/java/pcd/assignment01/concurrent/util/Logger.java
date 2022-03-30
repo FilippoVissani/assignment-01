@@ -18,12 +18,12 @@ public abstract class Logger {
         log("[EXECUTION_TIME_MS] => " + executionTime);
     }
 
-    public static void logProgramStarted() {
-        log("PROGRAM STARTED " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+    public static void logSimulationStarted() {
+        log("SIMULATION STARTED " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
     }
 
     public static void logProgramTerminated() {
-        log("PROGRAM TERMINATED " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        log("SIMULATION TERMINATED " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
         log("");
     }
 

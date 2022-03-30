@@ -1,6 +1,7 @@
 package pcd.assignment01.concurrent.model;
 
 import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Pair;
 import pcd.assignment01.concurrent.util.Point2D;
 
 import java.util.List;

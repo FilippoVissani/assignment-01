@@ -1,6 +1,7 @@
 package pcd.assignment01.concurrent.model;
 
 import pcd.assignment01.concurrent.util.Boundary;
+import pcd.assignment01.concurrent.util.Pair;
 import pcd.assignment01.concurrent.util.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class ModelImpl implements Model{
     public ModelImpl() {
         virtualTime = 0;
         timeStep = 0.001;
-        generateBodies(1700);
+        generateBodies(17000);
     }
 
     @Override
@@ -51,28 +52,28 @@ public class ModelImpl implements Model{
 
     @Override
     public void checkAndSolveBoundaryCollisionOnBodiesRange(final Pair<Integer, Integer> range){
-        for(int i = range.getX(); i < range.getY(); i++){
+        for(int i = range.getStart(); i < range.getStop(); i++){
             this.bodies.get(i).checkAndSolveBoundaryCollision(bounds);
         }
     }
 
     @Override
     public void updatePositionOnBodiesRange(final Pair<Integer, Integer> range){
-        for(int i = range.getX(); i < range.getY(); i++){
+        for(int i = range.getStart(); i < range.getStop(); i++){
             this.bodies.get(i).updatePosition(timeStep);
         }
     }
 
     @Override
     public void updateSpeedOnBodiesRange(final Pair<Integer, Integer> range, final List<Vector2D> acceleration){
-        for(int i = range.getX(); i < range.getY(); i++){
-            this.bodies.get(i).updateSpeed(acceleration.get(i - range.getX()), timeStep);
+        for(int i = range.getStart(); i < range.getStop(); i++){
+            this.bodies.get(i).updateSpeed(acceleration.get(i - range.getStart()), timeStep);
         }
     }
 
     @Override
     public List<Vector2D> computeAccelerationOnBodiesRange(final Pair<Integer, Integer> range){
-        return this.bodies.subList(range.getX(), range.getY()).stream().map(this::computeAccelerationOnBody).collect(Collectors.toList());
+        return this.bodies.subList(range.getStart(), range.getStop()).stream().map(this::computeAccelerationOnBody).collect(Collectors.toList());
     }
 
     private Vector2D computeAccelerationOnBody(final Body body) {

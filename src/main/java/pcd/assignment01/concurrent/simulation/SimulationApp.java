@@ -8,8 +8,8 @@ public class SimulationApp {
     public static void main(String[] args) {
         ModelImpl model = new ModelImpl();
         ControllerImpl controller = new ControllerImpl(model);
-        GraphicalView view = new GraphicalView(controller, 1900,1000);
-        controller.setView(view);
+        //GraphicalView view = new GraphicalView(controller, 1900,1000);
+        //controller.setView(view);
         controller.startSimulation(1000);
     }
 }

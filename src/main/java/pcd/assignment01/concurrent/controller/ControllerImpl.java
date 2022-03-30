@@ -1,7 +1,6 @@
 package pcd.assignment01.concurrent.controller;
 
 import pcd.assignment01.concurrent.model.Model;
-import pcd.assignment01.concurrent.util.Logger;
 import pcd.assignment01.concurrent.view.View;
 
 public class ControllerImpl implements Controller{
@@ -25,15 +24,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void startSimulation(long nSteps) {
-        Logger.logProgramStarted();
-        Thread simulation = new Thread(this.simulationManager, "MASTERRRRRRRRRRRRRRRR");
-        simulation.start();
-/*        Logger.logSimulationResult(model.getBodiesPositions().size(),
-                nSteps,
-                this.simulationManager.getSpeedup(),
-                this.chronometer.getTime(),
-                this.simulationManager.getWorkersNumber());
-        Logger.logProgramTerminated();*/
+    public void startSimulation(long stepNumber) {
+        new Thread(this.simulationManager).start();
     }
 }
