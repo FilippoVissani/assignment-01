@@ -20,8 +20,9 @@ public class SimulationManagerImpl implements SimulationManager {
         this.model = model;
         this.controller = controller;
         this.stepNumber = stepNumber;
-        //int workersNumber = Runtime.getRuntime().availableProcessors() + 1;
-        int workersNumber = 1;
+        this.chronometer = new ChronometerImpl();
+        int workersNumber = Runtime.getRuntime().availableProcessors() + 1;
+        //int workersNumber = 1;
         List<Barrier> barriers = new ArrayList<>();
         this.barrier = new BarrierImpl(workersNumber + 1);
         barriers.add(this.barrier);
@@ -31,22 +32,12 @@ public class SimulationManagerImpl implements SimulationManager {
         barriers.add(new BarrierImpl(workersNumber));
         this.workers = new HashSet<>();
         int range = model.getBodiesNumber() / workersNumber;
-        for (int i = 0; i < model.getBodiesNumber(); i = i + range){
-            this.workers.add(new Worker(barriers,
-                    model,
-                    new Pair<>(i, i + range),
-                    this.stepNumber));
+        int last = 0;
+        for (int i = 0; i < workersNumber - 1; i++){
+            last = i * range + range;
+            this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last), stepNumber));
         }
-        chronometer = new ChronometerImpl();
-    }
-
-    @Override
-    public double getSpeedup(){
-/*        if (this.speedup.isEmpty()){
-            throw new IllegalStateException("First simulation not executed");
-        }
-        return this.speedup.get();*/
-        return 0;
+        this.workers.add(new Worker(barriers, model, new Pair<>(last, this.model.getBodiesNumber()), stepNumber));
     }
 
     @Override

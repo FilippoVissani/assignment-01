@@ -17,7 +17,7 @@ public class ModelImpl implements Model{
     public ModelImpl() {
         virtualTime = 0;
         timeStep = 0.001;
-        generateBodies(17000);
+        generateBodies(10000);
     }
 
     @Override
