@@ -16,23 +16,26 @@ public class SimulationManagerImpl implements SimulationManager {
     private final Chronometer chronometer;
     private final Pair<Barrier, Barrier> barrier;
 
-    public SimulationManagerImpl(final Model model, final ViewController controller, final long stepNumber) {
+    public SimulationManagerImpl(final Model model, final ViewController controller, final long stepNumber, Optional<Integer> workersNumber) {
         this.model = model;
         this.controller = controller;
         this.stepNumber = stepNumber;
         this.chronometer = new ChronometerImpl();
-        int workersNumber = Runtime.getRuntime().availableProcessors() + 1;
+        int threadsNumber = Runtime.getRuntime().availableProcessors() + 1;
+        if (workersNumber.isPresent()){
+            threadsNumber = workersNumber.get();
+        }
         List<Barrier> barriers = new ArrayList<>();
-        this.barrier = new Pair<>(new BarrierImpl(workersNumber + 1), new BarrierImpl(workersNumber + 1));
+        this.barrier = new Pair<>(new BarrierImpl(threadsNumber + 1), new BarrierImpl(threadsNumber + 1));
         barriers.add(barrier.getStart());
-        barriers.add(new BarrierImpl(workersNumber));
-        barriers.add(new BarrierImpl(workersNumber));
-        barriers.add(new BarrierImpl(workersNumber));
+        barriers.add(new BarrierImpl(threadsNumber));
+        barriers.add(new BarrierImpl(threadsNumber));
+        barriers.add(new BarrierImpl(threadsNumber));
         barriers.add(barrier.getStop());
         this.workers = new HashSet<>();
-        int range = model.getBodiesNumber() / workersNumber;
+        int range = model.getBodiesNumber() / threadsNumber;
         int last = 0;
-        for (int i = 0; i < workersNumber - 1; i++){
+        for (int i = 0; i < threadsNumber - 1; i++){
             last = i * range + range;
             this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last), stepNumber));
         }
@@ -66,7 +69,6 @@ public class SimulationManagerImpl implements SimulationManager {
         this.chronometer.stop();
         Logger.logSimulationResult(model.getBodiesPositions().size(),
                 stepNumber,
-                0,
                 this.chronometer.getTime(),
                 this.workers.size());
         Logger.logProgramTerminated();

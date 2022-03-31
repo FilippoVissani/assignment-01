@@ -9,12 +9,11 @@ import java.time.format.DateTimeFormatter;
 
 public abstract class Logger {
 
-    public static void logSimulationResult(int nBodies, long nSteps, double speedup, long executionTime, int nThreads) {
+    public static void logSimulationResult(int nBodies, long nSteps, long executionTime, int nThreads) {
         log("--- TEST " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + " ---");
         log("[BODIES] => " + nBodies);
         log("[STEPS] => " + nSteps);
         log("[THREADS] => " + nThreads);
-        log("[SPEEDUP] => " + speedup);
         log("[EXECUTION_TIME_MS] => " + executionTime);
     }
 

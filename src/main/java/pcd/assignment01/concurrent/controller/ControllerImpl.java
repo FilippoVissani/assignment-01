@@ -3,14 +3,16 @@ package pcd.assignment01.concurrent.controller;
 import pcd.assignment01.concurrent.model.Model;
 import pcd.assignment01.concurrent.view.View;
 
+import java.util.Optional;
+
 public class ControllerImpl implements Controller{
     private final Model model;
     private View view;
     private final SimulationManager simulationManager;
 
-    public ControllerImpl(final Model model) {
+    public ControllerImpl(final Model model, final long stepNumber, Optional<Integer> workersNumber) {
         this.model = model;
-        this.simulationManager = new SimulationManagerImpl(model, this, 1000);
+        this.simulationManager = new SimulationManagerImpl(model, this, stepNumber, workersNumber);
     }
 
     @Override

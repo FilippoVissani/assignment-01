@@ -13,10 +13,10 @@ public class ModelImpl implements Model{
     private double virtualTime;
     final double timeStep;
 
-    public ModelImpl() {
+    public ModelImpl(final int bodiesNumber) {
         virtualTime = 0;
         timeStep = 0.001;
-        generateBodies(1000);
+        generateBodies(bodiesNumber);
     }
 
     @Override
