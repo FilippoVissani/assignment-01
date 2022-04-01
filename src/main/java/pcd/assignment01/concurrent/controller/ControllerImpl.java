@@ -12,7 +12,7 @@ public class ControllerImpl implements Controller{
 
     public ControllerImpl(final Model model, final long stepNumber, Optional<Integer> workersNumber) {
         this.model = model;
-        this.simulationManager = new SimulationManagerImpl(model, this, stepNumber, workersNumber);
+        this.simulationManager = new SimulationManager(model, this, stepNumber, workersNumber);
     }
 
     @Override

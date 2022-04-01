@@ -8,17 +8,17 @@ import java.util.List;
 
 public class Worker extends Thread {
 
-    private final List<Barrier> barriers;
+    private final Pair<Barrier, Barrier> barriers;
     private final Model model;
     private final Pair<Integer, Integer> range;
     private final long stepNumber;
     private long actualStepNumber;
 
-    public Worker(final List<Barrier> barrier,
+    public Worker(final Pair<Barrier, Barrier> barriers,
                   final Model model,
                   final Pair<Integer, Integer> range,
                   final long stepNumber) {
-        this.barriers = barrier;
+        this.barriers = barriers;
         this.model = model;
         this.range = range;
         this.stepNumber = stepNumber;
@@ -29,15 +29,12 @@ public class Worker extends Thread {
     public void run() {
         try {
             while (this.actualStepNumber < this.stepNumber){
-                this.barriers.get(0).hitAndWaitAll();
                 List<Vector2D> acceleration = model.computeAccelerationOnBodiesRange(range);
-                this.barriers.get(1).hitAndWaitAll();
                 this.model.updateSpeedOnBodiesRange(range, acceleration);
-                this.barriers.get(2).hitAndWaitAll();
+                this.barriers.getStart().hitAndWaitAll();
                 this.model.updatePositionOnBodiesRange(range);
-                this.barriers.get(3).hitAndWaitAll();
                 this.model.checkAndSolveBoundaryCollisionOnBodiesRange(range);
-                this.barriers.get(4).hitAndWaitAll();
+                this.barriers.getStop().hitAndWaitAll();
                 this.actualStepNumber = this.actualStepNumber + 1;
             }
         } catch (InterruptedException e) {
