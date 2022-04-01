@@ -33,28 +33,28 @@ public class Body {
      * @return the current position of the body
      */
     public Point2D getPosition() {
-        return position;
+        return this.position;
     }
 
     /**
      * @return the current speed of the body
      */
     public Vector2D getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     /**
      * @return the mass of the body
      */
     public double getMass() {
-        return mass;
+        return this.mass;
     }
 
     /**
      * @return the ID of the body
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public boolean equals(final Object body) {
@@ -65,7 +65,7 @@ public class Body {
      * @param dt to be multiplied by speed and added to position
      */
     public void updatePosition(final double dt){
-    	position = position.sum(speed.multiplyByScalar(dt));
+        this.position = this.position.sum(this.speed.multiplyByScalar(dt));
     }
 
     /**
@@ -89,7 +89,6 @@ public class Body {
     /**
      * @param body to calculate the repulsive force
      * @return the repulsive force under form of Vector2D
-     * @throws InfiniteForceException
      */
     public Vector2D computeRepulsiveForceBy(final Body body) throws InfiniteForceException {
 		double distance = getDistanceFrom(body);

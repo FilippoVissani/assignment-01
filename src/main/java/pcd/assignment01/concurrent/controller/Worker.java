@@ -14,31 +14,31 @@ public class Worker extends Thread {
     private final Pair<Barrier, Barrier> barriers;
     private final Model model;
     private final Pair<Integer, Integer> range;
-    private final long stepNumber;
-    private long actualStepNumber;
+    private final long iterations;
+    private long currentIteration;
 
     public Worker(final Pair<Barrier, Barrier> barriers,
                   final Model model,
                   final Pair<Integer, Integer> range,
-                  final long stepNumber) {
+                  final long iterations) {
         this.barriers = barriers;
         this.model = model;
         this.range = range;
-        this.stepNumber = stepNumber;
-        this.actualStepNumber = 0;
+        this.iterations = iterations;
+        this.currentIteration = 0;
     }
 
     @Override
     public void run() {
         try {
-            while (this.actualStepNumber < this.stepNumber){
+            while (this.currentIteration < this.iterations){
                 List<Vector2D> acceleration = model.computeAccelerationOnBodiesRange(range);
                 this.model.updateSpeedOnBodiesRange(range, acceleration);
                 this.barriers.getStart().hitAndWaitAll();
                 this.model.updatePositionOnBodiesRange(range);
                 this.model.checkAndSolveBoundaryCollisionOnBodiesRange(range);
                 this.barriers.getStop().hitAndWaitAll();
-                this.actualStepNumber = this.actualStepNumber + 1;
+                this.currentIteration = this.currentIteration + 1;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

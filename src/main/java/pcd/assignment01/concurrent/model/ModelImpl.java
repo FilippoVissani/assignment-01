@@ -33,17 +33,17 @@ public class ModelImpl implements Model{
 
     @Override
     public Boundary getBounds() {
-        return bounds;
+        return this.bounds;
     }
 
     @Override
     public double getVirtualTime() {
-        return virtualTime;
+        return this.virtualTime;
     }
 
     @Override
     public double getTimeStep() {
-        return timeStep;
+        return this.timeStep;
     }
 
     @Override
@@ -53,34 +53,34 @@ public class ModelImpl implements Model{
 
     @Override
     public void incrementVirtualTime(){
-        this.virtualTime = this.virtualTime + timeStep;
+        this.virtualTime = this.virtualTime + this.timeStep;
     }
 
     @Override
     public void checkAndSolveBoundaryCollisionOnBodiesRange(final Pair<Integer, Integer> range){
         for(int i = range.getStart(); i < range.getStop(); i++){
-            this.bodies.get(i).checkAndSolveBoundaryCollision(bounds);
+            this.bodies.get(i).checkAndSolveBoundaryCollision(this.bounds);
         }
     }
 
     @Override
     public void updatePositionOnBodiesRange(final Pair<Integer, Integer> range){
         for(int i = range.getStart(); i < range.getStop(); i++){
-            this.bodies.get(i).updatePosition(timeStep);
+            this.bodies.get(i).updatePosition(this.timeStep);
         }
     }
 
     @Override
     public void updateSpeedOnBodiesRange(final Pair<Integer, Integer> range, final List<Vector2D> acceleration){
         for(int i = range.getStart(); i < range.getStop(); i++){
-            this.bodies.get(i).updateSpeed(acceleration.get(i - range.getStart()), timeStep);
+            this.bodies.get(i).updateSpeed(acceleration.get(i - range.getStart()), this.timeStep);
         }
     }
 
     @Override
     public List<Vector2D> computeAccelerationOnBodiesRange(final Pair<Integer, Integer> range){
         List<Vector2D> acceleration = new ArrayList<>();
-        for (Body body : bodies.subList(range.getStart(), range.getStop())){
+        for (Body body : this.bodies.subList(range.getStart(), range.getStop())){
             acceleration.add(computeAccelerationOnBody(body));
         }
         return acceleration;
@@ -88,7 +88,7 @@ public class ModelImpl implements Model{
 
     private Vector2D computeAccelerationOnBody(final Body body) {
         Vector2D totalForce = new Vector2D(0, 0);
-        for (Body otherBody : bodies) {
+        for (Body otherBody : this.bodies) {
             if (!body.equals(otherBody)) {
                 try {
                     Vector2D forceByOtherBody = body.computeRepulsiveForceBy(otherBody);
@@ -101,15 +101,15 @@ public class ModelImpl implements Model{
         return totalForce.multiplyByScalar(1.0 / body.getMass());
     }
 
-    private void generateBodies(final int nBodies) {
-        bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
+    private void generateBodies(final int bodies) {
+        this.bounds = new Boundary(-6.0, -6.0, 6.0, 6.0);
         Random rand = new Random(System.currentTimeMillis());
-        bodies = new ArrayList<>();
-        for (int i = 0; i < nBodies; i++) {
-            double x = bounds.getX0() * 0.25 + rand.nextDouble() * (bounds.getX1() - bounds.getX0()) * 0.25;
-            double y = bounds.getY0() * 0.25 + rand.nextDouble() * (bounds.getY1() - bounds.getY0()) * 0.25;
+        this.bodies = new ArrayList<>();
+        for (int i = 0; i < bodies; i++) {
+            double x = this.bounds.getX0() * 0.25 + rand.nextDouble() * (this.bounds.getX1() - this.bounds.getX0()) * 0.25;
+            double y = this.bounds.getY0() * 0.25 + rand.nextDouble() * (this.bounds.getY1() - this.bounds.getY0()) * 0.25;
             Body b = new Body(i, new Point2D(x, y), new Vector2D(0, 0), 10);
-            bodies.add(b);
+            this.bodies.add(b);
         }
     }
 }

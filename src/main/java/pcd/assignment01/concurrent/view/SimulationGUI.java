@@ -17,11 +17,11 @@ public class SimulationGUI extends JFrame{
 
     private final SimulationPanel panel;
 
-    public SimulationGUI(int w, int h){
+    public SimulationGUI(final int width, final int height){
         setTitle("Bodies Simulation");
-        setSize(w,h);
+        setSize(width, height);
         setResizable(false);
-        panel = new SimulationPanel(w,h);
+        panel = new SimulationPanel(width, height);
         getContentPane().add(panel);
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent ev){
@@ -36,21 +36,24 @@ public class SimulationGUI extends JFrame{
 
     /**
      * @param bodiesPositions current position of the bodies
-     * @param vt actual virtual time
-     * @param iter current iteration
+     * @param virtualTime actual virtual time
+     * @param currentIteration current iteration
      * @param bounds of the simulation
      * Display an iteration of the simulation
      */
-    public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
+    public void display(final List<Point2D> bodiesPositions,
+                        final double virtualTime,
+                        final long currentIteration,
+                        final Boundary bounds){
         try {
             SwingUtilities.invokeAndWait(() -> {
-                panel.display(bodiesPositions, vt, iter, bounds);
+                panel.display(bodiesPositions, virtualTime, currentIteration, bounds);
                 repaint();
             });
         } catch (Exception ignored) {}
     }
 
-    public void updateScale(double k) {
+    public void updateScale(final double k) {
         panel.updateScale(k);
     }
 
@@ -58,16 +61,16 @@ public class SimulationGUI extends JFrame{
 
         private List<Point2D> bodiesPositions;
         private Boundary bounds;
-        private long nIter;
-        private double vt;
+        private long currentIteration;
+        private double virtualTime;
         private double scale = 1;
         private final long dx;
         private final long dy;
 
-        public SimulationPanel(int w, int h){
-            setSize(w,h);
-            dx = w/2 - 20;
-            dy = h/2 - 20;
+        public SimulationPanel(final int width, final int height){
+            setSize(width,height);
+            dx = width / 2 - 20;
+            dy = height / 2 - 20;
             this.addKeyListener(this);
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
@@ -77,12 +80,11 @@ public class SimulationGUI extends JFrame{
         public void paint(Graphics g){
             if (bodiesPositions != null) {
                 Graphics2D g2 = (Graphics2D) g;
-
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setRenderingHint(RenderingHints.KEY_RENDERING,
                         RenderingHints.VALUE_RENDER_QUALITY);
-                g2.clearRect(0,0,this.getWidth(),this.getHeight());
+                g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 
 
                 int x0 = getXcoord(bounds.getX0());
@@ -101,8 +103,8 @@ public class SimulationGUI extends JFrame{
                     g2.drawOval(getXcoord(position.getX()),getYcoord(position.getY()), radius, radius);
 
                 }
-                String time = String.format("%.2f", vt);
-                g2.drawString("Bodies: " + bodiesPositions.size() + " - vt: " + time + " - nIter: " + nIter + " (UP for zoom in, DOWN for zoom out)", 2, 20);
+                String time = String.format("%.2f", virtualTime);
+                g2.drawString("Bodies: " + bodiesPositions.size() + " - vt: " + time + " - nIter: " + currentIteration + " (UP for zoom in, DOWN for zoom out)", 2, 20);
             }
         }
 
@@ -117,8 +119,8 @@ public class SimulationGUI extends JFrame{
         public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
             this.bodiesPositions = bodiesPositions;
             this.bounds = bounds;
-            this.vt = vt;
-            this.nIter = iter;
+            this.virtualTime = vt;
+            this.currentIteration = iter;
         }
 
         public void updateScale(double k) {

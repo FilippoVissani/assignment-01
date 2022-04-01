@@ -13,9 +13,9 @@ public class ControllerImpl implements Controller{
     private View view;
     private final SimulationManager simulationManager;
 
-    public ControllerImpl(final Model model, final long stepNumber, Optional<Integer> workersNumber) {
+    public ControllerImpl(final Model model, final long iterations, final Optional<Integer> workersNumber) {
         this.model = model;
-        this.simulationManager = new SimulationManager(model, this, stepNumber, workersNumber);
+        this.simulationManager = new SimulationManager(model, this, iterations, workersNumber);
     }
 
     @Override

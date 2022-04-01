@@ -15,14 +15,14 @@ public class SimulationManager implements Runnable {
     private final Model model;
     private final Set<Worker> workers;
     private final ViewController controller;
-    private final long stepNumber;
+    private final long iterations;
     private final Chronometer chronometer;
     private final Pair<Barrier, Barrier> barriers;
 
-    public SimulationManager(final Model model, final ViewController controller, final long stepNumber, Optional<Integer> workersNumber) {
+    public SimulationManager(final Model model, final ViewController controller, final long iterations, final Optional<Integer> workersNumber) {
         this.model = model;
         this.controller = controller;
-        this.stepNumber = stepNumber;
+        this.iterations = iterations;
         this.chronometer = new ChronometerImpl();
         int threadsNumber = Runtime.getRuntime().availableProcessors() + 1;
         if (workersNumber.isPresent()){
@@ -34,9 +34,9 @@ public class SimulationManager implements Runnable {
         int last = 0;
         for (int i = 0; i < threadsNumber - 1; i++){
             last = i * range + range;
-            this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last), stepNumber));
+            this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last), iterations));
         }
-        this.workers.add(new Worker(barriers, model, new Pair<>(last, this.model.getBodiesNumber()), stepNumber));
+        this.workers.add(new Worker(barriers, model, new Pair<>(last, this.model.getBodiesNumber()), iterations));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SimulationManager implements Runnable {
             worker.start();
         }
         this.chronometer.start();
-        while (iteration < stepNumber) {
+        while (iteration < iterations) {
             try {
                 this.barriers.getStart().hitAndWaitAll();
                 this.barriers.getStop().hitAndWaitAll();
@@ -60,7 +60,7 @@ public class SimulationManager implements Runnable {
         }
         this.chronometer.stop();
         Logger.logSimulationResult(model.getBodiesPositions().size(),
-                stepNumber,
+                iterations,
                 this.chronometer.getTime(),
                 this.workers.size());
         Logger.logProgramTerminated();
