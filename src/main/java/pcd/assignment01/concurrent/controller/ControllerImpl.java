@@ -5,6 +5,9 @@ import pcd.assignment01.concurrent.view.View;
 
 import java.util.Optional;
 
+/**
+ * Implementation of Controller
+ */
 public class ControllerImpl implements Controller{
     private final Model model;
     private View view;

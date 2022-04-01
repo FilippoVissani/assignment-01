@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class that represents the model in MVC
+ */
 public class ModelImpl implements Model{
     private List<Body> bodies;
     private Boundary bounds;

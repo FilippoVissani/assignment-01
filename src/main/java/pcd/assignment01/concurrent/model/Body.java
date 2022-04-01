@@ -4,6 +4,9 @@ import pcd.assignment01.concurrent.model.exception.InfiniteForceException;
 import pcd.assignment01.concurrent.util.Boundary;
 import pcd.assignment01.concurrent.util.Point2D;
 
+/**
+ * Class that represents a body of the simulation
+ */
 public class Body {
     
 	private static final double REPULSIVE_CONST = 0.01;

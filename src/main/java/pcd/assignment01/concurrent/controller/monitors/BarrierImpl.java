@@ -1,5 +1,8 @@
 package pcd.assignment01.concurrent.controller.monitors;
 
+/**
+ * Implementation of Barrier interface
+ */
 public class BarrierImpl implements Barrier {
 
     private final int workersNumber;

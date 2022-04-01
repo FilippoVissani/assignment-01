@@ -17,18 +17,30 @@ public class Boundary {
 		this.y1 = y1;
 	}
 
+	/**
+	 * @return left bound
+	 */
 	public double getX0(){
 		return x0;
 	}
 
+	/**
+	 * @return right bound
+	 */
 	public double getX1(){
 		return x1;
 	}
 
+	/**
+	 * @return top bound
+	 */
 	public double getY0(){
 		return y0;
 	}
 
+	/**
+	 * @return bottom bound
+	 */
 	public double getY1(){
 		return y1;
 	}

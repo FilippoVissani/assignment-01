@@ -6,6 +6,9 @@ import pcd.assignment01.concurrent.util.Pair;
 import pcd.assignment01.concurrent.model.Vector2D;
 import java.util.List;
 
+/**
+ * Class that represents a worker thread
+ */
 public class Worker extends Thread {
 
     private final Pair<Barrier, Barrier> barriers;

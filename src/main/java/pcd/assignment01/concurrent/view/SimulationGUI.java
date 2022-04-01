@@ -10,6 +10,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 
+/**
+ * Graphical user interface of the simulation
+ */
 public class SimulationGUI extends JFrame{
 
     private final SimulationPanel panel;
@@ -31,6 +34,13 @@ public class SimulationGUI extends JFrame{
         this.setVisible(true);
     }
 
+    /**
+     * @param bodiesPositions current position of the bodies
+     * @param vt actual virtual time
+     * @param iter current iteration
+     * @param bounds of the simulation
+     * Display an iteration of the simulation
+     */
     public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
         try {
             SwingUtilities.invokeAndWait(() -> {

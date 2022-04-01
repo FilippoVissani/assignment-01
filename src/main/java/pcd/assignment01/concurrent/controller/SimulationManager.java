@@ -7,6 +7,9 @@ import pcd.assignment01.concurrent.util.Logger;
 import pcd.assignment01.concurrent.util.Pair;
 import java.util.*;
 
+/**
+ * Class used to manage the simulation
+ */
 public class SimulationManager implements Runnable {
 
     private final Model model;

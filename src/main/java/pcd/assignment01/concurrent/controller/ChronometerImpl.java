@@ -1,5 +1,8 @@
 package pcd.assignment01.concurrent.controller;
 
+/**
+ * Implementation of Chronometer
+ */
 public class ChronometerImpl implements Chronometer {
 
 	private boolean running;
