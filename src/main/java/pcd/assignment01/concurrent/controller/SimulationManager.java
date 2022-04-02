@@ -52,7 +52,7 @@ public class SimulationManager implements Runnable {
                 this.barriers.getStart().hitAndWaitAll();
                 this.barriers.getStop().hitAndWaitAll();
                 this.model.incrementVirtualTime();
-                //this.controller.updateView(iteration);
+                this.controller.updateView(iteration);
                 iteration = iteration + 1;
             } catch (InterruptedException e) {
                 e.printStackTrace();

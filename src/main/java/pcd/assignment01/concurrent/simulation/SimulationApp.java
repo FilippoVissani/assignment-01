@@ -7,17 +7,11 @@ import java.util.Optional;
 
 public class SimulationApp {
     public static void main(String[] args) {
-        ModelImpl model = new ModelImpl(Integer.parseInt(args[0]));
-        if (args.length == 3){
-            ControllerImpl controller = new ControllerImpl(model, Long.parseLong(args[1]), Optional.of(Integer.parseInt(args[2])));
-            //GraphicalView view = new GraphicalView(controller, 620, 620);
-            //controller.setView(view);
-            controller.startSimulation();
-        }else {
-            ControllerImpl controller = new ControllerImpl(model, Long.parseLong(args[1]), Optional.empty());
-            //GraphicalView view = new GraphicalView(controller, 620, 620);
-            //controller.setView(view);
-            controller.startSimulation();
-        }
+        ModelImpl model = new ModelImpl(100);
+        ControllerImpl controller = new ControllerImpl(model, 1000, Optional.empty());
+        GraphicalView view = new GraphicalView(controller, 820, 820);
+        controller.setView(view);
+        controller.startSimulation();
+
     }
 }
