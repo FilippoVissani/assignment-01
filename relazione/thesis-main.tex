@@ -168,10 +168,15 @@ si possono trarre le seguenti conclusioni:
 \begin{itemize}
 	\item Per un numero di corpi sufficientemente piccolo (in questo caso 100),
 	il programma sequenziale impiega meno tempo di quello parallelo.
-	\item I valori proposti relativi al numero di corpi non sono sufficienti per dimostrare che $N_{cpu}+1$
+	\item I valori proposti relativi al numero di corpi (100, 1000 e 5000) non sono sufficientemente elevati per dimostrare che $N_{cpu}+1$
 	è il numero ottimale di thread da usare. Infatti, considerando il tempo di esecuzione della simulazione con 5000 corpi e 1000 iterazioni,
-	la differenza tra 9 e 17 thread è pressoché nulla
+	la differenza tra 9 e 17 thread è pressoché nulla.
 \end{itemize}
+
+Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
+la differenza dei tempi di esecuzione diventa rilevante.
+I risultati dei test riportati nella tabella \ref{tab:table2} dimostrano effettivamente che
+il numero ottimale di thread da utilizzare è $N_{cpu} + 1$.
 
 \begin{center}
 	\begin{table}
