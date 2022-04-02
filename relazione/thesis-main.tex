@@ -180,55 +180,112 @@ il numero ottimale di thread da utilizzare è $N_{cpu} + 1$.
 
 \begin{center}
 	\begin{table}
-		\begin{tabular}{ |c|c|c|c|c| } 
+		\begin{tabular}{ |c|c|c|c|c|c| } 
 			\hline
-				Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
+				Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
 			\hline
-				100  & 50000  & 1 & 5612 & 1 \\
+			0 & 100 & 1000 & 1 & 165 & 1.0 \\ 
 			\hline
-				100  & 50000  & 9 & 13653 & 0.41 \\
+		   1 & 100 & 1000 & 9 & 165 & 1.0 \\ 
 			\hline
-				100  & 50000  & 17 & 23923 & 0.23 \\
+		   2 & 100 & 1000 & 17 & 393 & 0.42 \\ 
 			\hline
-				100  & 50000  & 99 & 123088 & 0.04 \\
+		   3 & 100 & 1000 & 99 & 2414 & 0.07 \\ 
 			\hline
-				1000  & 10000  & 1 & 82887 & 1 \\
+		   4 & 100 & 10000 & 1 & 1140 & 1.0 \\ 
 			\hline
-				1000  & 10000  & 9 & 40312 & 2.06 \\
+		   5 & 100 & 10000 & 9 & 2666 & 0.43 \\ 
 			\hline
-				1000  & 10000  & 17 & 44382 & 1.87 \\
+		   6 & 100 & 10000 & 17 & 4737 & 0.24 \\ 
 			\hline
-				1000  & 10000  & 99 & 46137 & 1.79 \\
+		   7 & 100 & 10000 & 99 & 24731 & 0.05 \\ 
 			\hline
-				5000  & 1000  & 1 & 183813 & 1 \\
+		   8 & 100 & 50000 & 1 & 5612 & 1.0 \\ 
 			\hline
-				5000  & 1000  & 9 & 103834 & 1.77 \\
+		   9 & 100 & 50000 & 9 & 13653 & 0.41 \\ 
 			\hline
-				5000  & 1000  & 17 & 102516 & 1.79 \\
+		   10 & 100 & 50000 & 17 & 23923 & 0.23 \\ 
 			\hline
-				5000  & 1000  & 99 & 102355 & 1.79 \\
+		   11 & 100 & 50000 & 99 & 123088 & 0.05 \\ 
+			\hline
+		   12 & 1000 & 1000 & 1 & 8387 & 1.0 \\ 
+			\hline
+		   13 & 1000 & 1000 & 9 & 4131 & 2.03 \\ 
+			\hline
+		   14 & 1000 & 1000 & 17 & 4552 & 1.84 \\ 
+			\hline
+		   15 & 1000 & 1000 & 99 & 4727 & 1.77 \\ 
+			\hline
+		   16 & 1000 & 10000 & 1 & 82887 & 1.0 \\ 
+			\hline
+		   17 & 1000 & 10000 & 9 & 40312 & 2.06 \\ 
+			\hline
+		   18 & 1000 & 10000 & 17 & 44382 & 1.87 \\ 
+			\hline
+		   19 & 1000 & 10000 & 99 & 46137 & 1.8 \\ 
+			\hline
+		   20 & 1000 & 50000 & 1 & 413746 & 1.0 \\ 
+			\hline
+		   21 & 1000 & 50000 & 9 & 210688 & 1.96 \\ 
+			\hline
+		   22 & 1000 & 50000 & 17 & 229109 & 1.81 \\ 
+			\hline
+		   23 & 1000 & 50000 & 99 & 234906 & 1.76 \\ 
+			\hline
+		   24 & 5000 & 1000 & 1 & 183813 & 1.0 \\ 
+			\hline
+		   25 & 5000 & 1000 & 9 & 103834 & 1.77 \\ 
+			\hline
+		   26 & 5000 & 1000 & 17 & 102516 & 1.79 \\ 
+			\hline
+		   27 & 5000 & 1000 & 99 & 102355 & 1.8 \\ 
+			\hline
+		   28 & 5000 & 10000 & 1 & 1971397 & 1.0 \\ 
+			\hline
+		   29 & 5000 & 10000 & 9 & 1017581 & 1.94 \\ 
+			\hline
+		   30 & 5000 & 10000 & 17 & 1008593 & 1.95 \\ 
+			\hline
+		   31 & 5000 & 10000 & 99 & 1023304 & 1.93 \\ 
+			\hline
+		   32 & 5000 & 50000 & 1 & 10207974 & 1.0 \\ 
+			\hline
+		   33 & 5000 & 50000 & 9 & 5046146 & 2.02 \\ 
+			\hline
+		   34 & 5000 & 50000 & 17 & 5029016 & 2.03 \\ 
+			\hline
+		   35 & 5000 & 50000 & 99 & 5148153 & 1.98 \\ 
 			\hline
 		\end{tabular}
 		\label{tab:table1}
-		\caption{Tabella con i risultati dei test}
+		\caption{Risultati dei test}
 	\end{table}
 \end{center}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/speedup-plot.png}
+	\caption{Speedup in funzione del numero di thread e di corpi (con numero di iterazioni fissato a 50000).}
+	\label{fig:speedup}
+\end{figure}
+
 \begin{center}
 	\begin{table}
-		\begin{tabular}{ |c|c|c|c|c| } 
+		\begin{tabular}{ |c|c|c|c|c|c| } 
 			\hline
-				Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
+				Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
 			\hline
-				50000  & 100  & 1 & ??? & 1 \\
+		   36 & 50000 & 100 & 1 & 7588885 & 1.0 \\ 
 			\hline
-				50000  & 100  & 9 & ??? & ??? \\
+		   37 & 50000 & 100 & 9 & 1595651 & 4.76 \\ 
 			\hline
-				50000  & 100  & 17 & ??? & ??? \\
+		   38 & 50000 & 100 & 17 & 1275306 & 5.95 \\ 
+			\hline
+		   39 & 50000 & 100 & 99 & 1276354 & 5.95 \\ 
 			\hline
 		\end{tabular}
 		\label{tab:table2}
-		\caption{Tabella con i risultati dei test}
+		\caption{Risultati dei test}
 	\end{table}
 \end{center}
 
