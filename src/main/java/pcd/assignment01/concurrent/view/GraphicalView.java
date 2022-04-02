@@ -12,13 +12,17 @@ public class GraphicalView implements View {
     private final Controller controller;
     private final SimulationGUI frame;
 
-    public GraphicalView(final Controller controller, int w, int h){
+    public GraphicalView(final Controller controller, int width, int height){
         this.controller = controller;
-        frame = new SimulationGUI(w,h);
+        frame = new SimulationGUI(width,height, this);
     }
 
     @Override
     public void display(final List<Point2D> bodiesPositions, final double virtualTime, final long currentIteration, final Boundary bounds) {
         frame.display(bodiesPositions, virtualTime, currentIteration, bounds);
+    }
+
+    protected void startSimulation(){
+        this.controller.startSimulation();
     }
 }

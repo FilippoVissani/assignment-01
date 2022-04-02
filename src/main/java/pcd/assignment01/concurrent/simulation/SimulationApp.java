@@ -11,7 +11,7 @@ public class SimulationApp {
         ControllerImpl controller = new ControllerImpl(model, 1000, Optional.empty());
         GraphicalView view = new GraphicalView(controller, 820, 820);
         controller.setView(view);
-        controller.startSimulation();
+        //controller.startSimulation();
 
     }
 }

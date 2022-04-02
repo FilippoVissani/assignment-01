@@ -13,8 +13,10 @@ import java.util.List;
 public class SimulationGUI extends JFrame{
 
     private final SimulationPanel simulationPanel;
+    private static GraphicalView graphicalView;
 
-    public SimulationGUI(final int width, final int height){
+    public SimulationGUI(final int width, final int height, final GraphicalView graphicalView){
+        this.graphicalView = graphicalView;
         setTitle("Bodies Simulation");
         setSize(width, height);
         setResizable(false);
@@ -81,6 +83,17 @@ public class SimulationGUI extends JFrame{
         public ButtonsPanel() {
             this.buttonStart = new JButton("Start");
             this.buttonStop = new JButton("Stop");
+            this.buttonStop.setEnabled(false);
+            this.buttonStart.addActionListener(e -> {
+                System.out.println("buttonStart pressed");
+                ((JButton) e.getSource()).setEnabled(false);
+                this.buttonStop.setEnabled(true);
+                graphicalView.startSimulation();
+            });
+            this.buttonStop.addActionListener(e -> {
+                System.out.println("buttonStop pressed");
+                this.buttonStop.setEnabled(false);
+            });
             this.add(buttonStart);
             this.add(buttonStop);
         }
