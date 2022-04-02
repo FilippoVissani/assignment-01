@@ -16,28 +16,12 @@ public class SimulationGUI extends JFrame{
     private static GraphicalView graphicalView;
 
     public SimulationGUI(final int width, final int height, final GraphicalView graphicalView){
-        this.graphicalView = graphicalView;
+        SimulationGUI.graphicalView = graphicalView;
         setTitle("Bodies Simulation");
         setSize(width, height);
         setResizable(false);
         JPanel mainPanel = new JPanel(new BorderLayout());
         this.simulationPanel = new SimulationPanel(width, height);
-        this.simulationPanel.getInputMap().put(KeyStroke.getKeyStroke("s"), "DOWN");
-        this.simulationPanel.getInputMap().put(KeyStroke.getKeyStroke("w"), "UP");
-        this.simulationPanel.getActionMap().put("UP", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                simulationPanel.zoomIn();
-                System.out.println("Activated UP");
-            }
-        });
-        this.simulationPanel.getActionMap().put("DOWN", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                simulationPanel.zoomOut();
-                System.out.println("Activated DOWN");
-            }
-        });
         ButtonsPanel buttonsPanel = new ButtonsPanel();
         mainPanel.add(this.simulationPanel, BorderLayout.CENTER);
         mainPanel.add(buttonsPanel, BorderLayout.PAGE_START);
@@ -72,10 +56,6 @@ public class SimulationGUI extends JFrame{
         } catch (Exception ignored) {}
     }
 
-    public void updateScale(final double k) {
-        simulationPanel.updateScale(k);
-    }
-
     public static class ButtonsPanel extends JPanel {
         private final JButton buttonStart;
         private final JButton buttonStop;
@@ -88,7 +68,7 @@ public class SimulationGUI extends JFrame{
                 System.out.println("buttonStart pressed");
                 ((JButton) e.getSource()).setEnabled(false);
                 this.buttonStop.setEnabled(true);
-                graphicalView.startSimulation();
+                SimulationGUI.graphicalView.startSimulation();
             });
             this.buttonStop.addActionListener(e -> {
                 System.out.println("buttonStop pressed");
@@ -99,7 +79,7 @@ public class SimulationGUI extends JFrame{
         }
     }
 
-    public static class SimulationPanel extends JPanel {
+    public static class SimulationPanel extends JPanel implements KeyListener{
 
         private List<Point2D> bodiesPositions;
         private Boundary bounds;
@@ -113,6 +93,7 @@ public class SimulationGUI extends JFrame{
             setSize(width,height);
             this.dx = width / 2 - 20;
             this.dy = height / 2 - 20;
+            this.addKeyListener(this);
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
             requestFocusInWindow();
@@ -165,16 +146,25 @@ public class SimulationGUI extends JFrame{
             this.currentIteration = iter;
         }
 
-        public void updateScale(double k) {
-            scale *= k;
-        }
-
-        public void zoomIn(){
+        private void zoomIn(){
             scale *= 1.1;
         }
 
-        public void zoomOut(){
+        private void zoomOut(){
             scale *= 0.9;
         }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == 38){  		/* KEY UP */
+                this.zoomIn();
+            } else if (e.getKeyCode() == 40){  	/* KEY DOWN */
+                this.zoomOut();
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {}
+        @Override
+        public void keyTyped(KeyEvent e) {}
     }
 }
