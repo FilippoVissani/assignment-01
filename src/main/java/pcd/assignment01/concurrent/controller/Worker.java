@@ -41,6 +41,9 @@ public class Worker extends Thread {
         }
     }
 
+    /**
+     * Stop this worker
+     */
     public synchronized void stopWorker() {
         this.stop = true;
     }

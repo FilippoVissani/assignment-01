@@ -23,7 +23,7 @@ public class ControllerImpl implements Controller{
     }
 
     @Override
-    public void updateView(long currentIteration){
+    public synchronized void updateView(long currentIteration){
         view.display(model.getBodiesPositions(), model.getVirtualTime(), currentIteration, model.getBounds());
     }
 
