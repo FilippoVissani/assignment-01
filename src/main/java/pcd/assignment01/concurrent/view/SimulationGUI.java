@@ -65,14 +65,13 @@ public class SimulationGUI extends JFrame{
             this.buttonStop = new JButton("Stop");
             this.buttonStop.setEnabled(false);
             this.buttonStart.addActionListener(e -> {
-                System.out.println("buttonStart pressed");
                 ((JButton) e.getSource()).setEnabled(false);
                 this.buttonStop.setEnabled(true);
                 SimulationGUI.graphicalView.startSimulation();
             });
             this.buttonStop.addActionListener(e -> {
-                System.out.println("buttonStop pressed");
                 this.buttonStop.setEnabled(false);
+                SimulationGUI.graphicalView.stopSimulation();
             });
             this.add(buttonStart);
             this.add(buttonStop);

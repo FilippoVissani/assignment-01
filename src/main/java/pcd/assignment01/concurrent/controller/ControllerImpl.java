@@ -2,7 +2,6 @@ package pcd.assignment01.concurrent.controller;
 
 import pcd.assignment01.concurrent.model.Model;
 import pcd.assignment01.concurrent.view.View;
-
 import java.util.Optional;
 
 /**
@@ -31,5 +30,10 @@ public class ControllerImpl implements Controller{
     @Override
     public void startSimulation() {
         new Thread(this.simulationManager, "MASTER").start();
+    }
+
+    @Override
+    public void stopSimulation() {
+        this.simulationManager.stopSimulation();
     }
 }

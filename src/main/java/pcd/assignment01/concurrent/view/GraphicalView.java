@@ -22,7 +22,13 @@ public class GraphicalView implements View {
         frame.display(bodiesPositions, virtualTime, currentIteration, bounds);
     }
 
-    protected void startSimulation(){
+    @Override
+    public void stopSimulation() {
+        this.controller.stopSimulation();
+    }
+
+    @Override
+    public void startSimulation(){
         this.controller.startSimulation();
     }
 }
