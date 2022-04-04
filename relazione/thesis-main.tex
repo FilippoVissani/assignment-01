@@ -45,21 +45,23 @@ soggetti a due tipi di forze:
 	Che si oppone al moto, quindi in direzione opposta alla sua velocità, dove $k_{fri}$ è una costante data.
 \end{itemize}
 Il programma è sequenziale, non strutturato. 
-L'algoritmo che definisce il comportamento del simulatore in pseudo codice è il seguente:
+L'algoritmo \ref{lst:lst1} definisce il comportamento del simulatore in pseudo codice.
 \newpage
-\begin{lstlisting}
-vt = 0;     /* virtual time */         
-dt  = 0.01; /* time increment at each iteration */
+\begin{lstlisting}[label=lst:lst1,caption=pseudocodice del programma sequenziale]
+/* virtual time */
+vt = 0;
+/* time increment at each iteration */     
+dt  = 0.01;
 
 loop:
-	For each body b[i]:
+	for each body b[i]:
 		compute total force exerted by other bodies b[j] and friction;
 		compute the instant acceleration, given the total force and mass;
 		update body velocity, given the acceleration and the virtual time elapsed dt;
-	Update bodies positions, given the velocity and virtual time elapsed dt;
-	Check boundary collisions;
-    vt = vt + dt;   
-    Display current stage;
+	update bodies positions, given the velocity and virtual time elapsed dt;
+	check boundary collisions;
+	vt = vt + dt;   
+	display current stage;
 
 \end{lstlisting}
 
@@ -96,26 +98,40 @@ La GUI si presuppone visualizzi stati consistenti della simulazione (ma non nece
 \chapter{Analisi del Problema}
 \label{chap:Analisi del Problema}
 %----------------------------------------------------------------------------------------
-Problema dell'accesso concorrente alla stessa lista di corpi, quindi è necessario parallelizzare la computazione
-sincronizzando adeguatamente i flussi di esecuzione (evitando deadlock, race contition, ecc..).
-Allo stesso tempo è fondamentale che i flussi di esecuzione sfruttino al massimo il tempo per la computazione evitando
-attese non necessarie.
-Nel portare il programma da sequenziale a parallelo bisogna fare in modo che ad ogni iterazione
-la rappresentazione della simulazione sia consistente, ovvero non ci deve essere un thread che sta
-calcolando la forza repulsiva su un corpo mentre un altro thread ha già aggiornato un altro corpo con la nuova posizione.
-È necessario che i thread siano allineati sulla stessa iterazione.
-È fondamentale che la parallelizzazione avvenga correttamente indipendentemente dalla macchina su
-cui viene eseguito il programma, ovvero il numero di thread deve essere scelto rispettando la formula
-$N_{cpu} + 1$ per massimizzare le performance.
-Un altro aspetto da tenere in considerazione è quello che riguarda la modularità del sistema.
-È bene suddividere la parte di logica dalla parte che si occupa di orchestrare la computazione
-e dalla parte che si occupa della visualizzazione. in breve: tenere ben separate la componente logica,
-la componente visuale e la componente di coordinamento.
+Portando il programma da sequenziale a parallelo insorgono le seguenti problematiche:
+\begin{itemize}
+	\item Più flussi di esecuzione accedono in modo concorrente alla stessa lista di corpi.
+	Quindi è necessario che i flussi siano sincronizzati (evitando deadlock, race contition, ecc...).
+	\item È fondamentale che la sincronizzazione avvenga in modo efficiente; bisogna sfruttare al massimo il tempo per
+	la computazione evitando attese non necessarie.
+	\item A ogni iterazione, dati due flussi di esecuzione $f_{i}$ e $f_{j}$, i quali eseguono computazioni su due corpi $c_{k}$ e $c_{w}$ rispettivamente (con $i \neq j$ e $k \neq w$),
+	$f_{i}$ non deve aggiornare la posizione di $c_{k}$ prima che $f_{j}$ abbia terminato di calcolare la forza esercitata su $c_{w}$.
+	\item La rappresentazione della simulazione deve rimanere
+	consistente, i flussi devono essere sempre sincronizzati sulla
+	stessa iterazione.
+	\item È fondamentale che il numero di flussi di esecuzione venga scelto sulla base dei processori disponibili sulla macchina, ovvero
+	rispettando la formula $N_{cpu} + 1$, per minimizzare il tempo di esecuzione.
+	\item È buona pratica separare i componenti che riguardano la concorrenza dagli aspetti di logica e di grafica,
+	così da rendere il sistema modulare ed estendibile.
+	\item TODO: aspetti GUI
+\end{itemize}
 
 %----------------------------------------------------------------------------------------
-\chapter{Descrizione dell'Architettura Proposta} % possible chapter for Projects
+\chapter{Descrizione dell'Architettura Proposta}
 \label{chap:Descrizione dell'Architettura Proposta}
 %----------------------------------------------------------------------------------------
+
+In fase di progettazione, per separare al meglio gli aspetti di logica e grafica da quelli di concorrenza, si è scelto di
+impiegare il pattern architetturale \textit{Model View Controller}.
+Il diagramma delle classi dei macro componenti viene presentato in Figura \ref{fig:mvc}.
+Gli aspetti di concorrenza vengono gestiti completamente nel \textit{Controller},
+descritto più dettagliatamente in Figura \ref{fig:SimulatioManager}.
+La classe \texttt{SimulationManager}, che implementa l'interfaccia \texttt{Runnable},
+si occupa di generare i \texttt{Worker}, i quali a ogni iterazione
+calcolano la nuova posizione dei corpi.
+I \texttt{Worker} sono sincronizzati tra loro e con il \texttt{SimulationManager}
+grazie a due monitor di tipo barrier.
+
 
 \begin{figure}
 	\centering
@@ -131,15 +147,52 @@ la componente visuale e la componente di coordinamento.
 	\label{fig:SimulatioManager}
 \end{figure}
 
+\begin{lstlisting}[float,
+					language=Java,
+					label=lst:lst3,caption=Implementazione della barrier]
+public synchronized void hitAndWaitAll() throws InterruptedException {
+	this.actualWorkers = this.actualWorkers + 1;
+	if (this.actualWorkers == this.workersNumber) {
+		this.exit = true;
+		notifyAll();
+	} else {
+		while (this.actualWorkers < this.workersNumber && !this.exit) {
+			wait();
+		}
+	}
+	this.actualWorkers = this.actualWorkers - 1;
+	if (this.actualWorkers == 0) this.exit = false;
+}
+\end{lstlisting}
+
 %----------------------------------------------------------------------------------------
 \chapter{Descrizione del Comportamento del Sistema} % possible chapter for Projects
 \label{chap:Descrizione del Comportamento del Sistema}
 %----------------------------------------------------------------------------------------
 
-You may need to reference listings in your thesis.
-%
-In this case, you are encouraged to make them \emph{floating}, and reference them by means of labels.
+Il Listato \ref{lst:lst2} presenta una descrizione di alto livello del
+comportamento del sistema proposto.
+//TODO: introdurre listato anche per SimulationManager
+Alle righe 6 e 11 tutti i flussi di esecuzione attendono finché l'ultimo non ha eseguito le istruzioni precedenti.
 
+\begin{lstlisting}[label=lst:lst2,caption=pseudocodice del programma parallelo]
+	/* virtual time */
+	vt = 0;
+	/* time increment at each iteration */     
+	dt  = 0.01;
+	Barrier barrier;
+	loop:
+		for each body b[i]:
+			compute total force exerted by other bodies b[j] and friction;
+			compute the instant acceleration, given the total force and mass;
+			update body velocity, given the acceleration and the virtual time elapsed dt;
+		barrier.hitAndWaitAll();
+		update bodies positions, given the velocity and virtual time elapsed dt;
+		check boundary collisions;
+		barrier.hitAndWaitAll();
+		vt = vt + dt;   
+		display current stage;
+\end{lstlisting}
 %----------------------------------------------------------------------------------------
 \chapter{Verifica delle Prestazioni} % possible chapter for Projects
 \label{chap:Verifica delle Prestazioni}
@@ -167,10 +220,10 @@ Osservando i dati riportati nella tabella \ref{tab:table1}
 si possono trarre le seguenti conclusioni:
 \begin{itemize}
 	\item Per un numero di corpi sufficientemente piccolo (in questo caso 100),
-	il programma sequenziale impiega meno tempo di quello parallelo.
-	\item I valori proposti relativi al numero di corpi (100, 1000 e 5000) non sono sufficientemente elevati per dimostrare che $N_{cpu}+1$
-	è il numero ottimale di thread da usare. Infatti, considerando il tempo di esecuzione della simulazione con 5000 corpi e 1000 iterazioni,
-	la differenza tra 9 e 17 thread è pressoché nulla.
+	il programma sequenziale impiega meno tempo di quello concorrente.
+	\item I valori proposti relativi al numero di corpi (100, 1000 e 5000) non sono sufficientemente elevati per
+	dimostrare che $N_{cpu}+1$ è il numero ottimale di thread da usare. Infatti, considerando il tempo di esecuzione
+	della simulazione con 5000 corpi e 1000 iterazioni, la differenza tra 9 e 17 thread è pressoché nulla.
 \end{itemize}
 
 Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
@@ -182,7 +235,7 @@ il numero ottimale di thread da utilizzare è $N_{cpu} + 1$.
 	\begin{table}
 		\begin{tabular}{ |c|c|c|c|c|c| } 
 			\hline
-				Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
+			Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
 			\hline
 			0 & 100 & 1000 & 1 & 165 & 1.0 \\ 
 			\hline
