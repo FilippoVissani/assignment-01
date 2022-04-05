@@ -98,11 +98,11 @@ La GUI si presuppone visualizzi stati consistenti della simulazione (ma non nece
 \chapter{Analisi del Problema}
 \label{chap:Analisi del Problema}
 %----------------------------------------------------------------------------------------
-Portando il programma da sequenziale a parallelo insorgono le seguenti problematiche:
+Portando il programma da sequenziale a parallelo devono essere considerati i seguenti aspetti:
 \begin{itemize}
 	\item Più flussi di esecuzione accedono in modo concorrente alla stessa lista di corpi.
 	Quindi è necessario che i flussi siano sincronizzati (evitando deadlock, race contition, ecc...).
-	\item È fondamentale che la sincronizzazione avvenga in modo efficiente; bisogna sfruttare al massimo il tempo per
+	\item La sincronizzazione deve avvenire in modo efficiente; bisogna sfruttare al massimo il tempo per
 	la computazione evitando attese non necessarie.
 	\item A ogni iterazione, dati due flussi di esecuzione $f_{i}$ e $f_{j}$, i quali eseguono computazioni su due corpi $c_{k}$ e $c_{w}$ rispettivamente (con $i \neq j$ e $k \neq w$),
 	$f_{i}$ non deve aggiornare la posizione di $c_{k}$ prima che $f_{j}$ abbia terminato di calcolare la forza esercitata su $c_{w}$.
@@ -113,7 +113,9 @@ Portando il programma da sequenziale a parallelo insorgono le seguenti problemat
 	rispettando la formula $N_{cpu} + 1$, per minimizzare il tempo di esecuzione.
 	\item È buona pratica separare i componenti che riguardano la concorrenza dagli aspetti di logica e di grafica,
 	così da rendere il sistema modulare ed estendibile.
-	\item TODO: aspetti GUI
+	\item Gli eventi relativi alla pressione dei pulsanti
+	devono essere gestiti atomicamente, dato che si occupano di
+	avviare e fermare i flussi di esecuzione.
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
@@ -122,16 +124,22 @@ Portando il programma da sequenziale a parallelo insorgono le seguenti problemat
 %----------------------------------------------------------------------------------------
 
 In fase di progettazione, per separare al meglio gli aspetti di logica e grafica da quelli di concorrenza, si è scelto di
-impiegare il pattern architetturale \textit{Model View Controller}.
-Il diagramma delle classi dei macro componenti viene presentato in Figura \ref{fig:mvc}.
+impiegare il pattern architetturale \textit{Model View Controller} (Figura \ref{fig:mvc}).
 Gli aspetti di concorrenza vengono gestiti completamente nel \textit{Controller},
 descritto più dettagliatamente in Figura \ref{fig:SimulatioManager}.
 La classe \texttt{SimulationManager}, che implementa l'interfaccia \texttt{Runnable},
 si occupa di generare i \texttt{Worker}, i quali a ogni iterazione
 calcolano la nuova posizione dei corpi.
 I \texttt{Worker} sono sincronizzati tra loro e con il \texttt{SimulationManager}
-grazie a due monitor di tipo barrier.
-
+grazie a due monitor di tipo barriera.
+Nel Listato \ref{lst:lst3} viene riportata l'implementazione del metodo \texttt{hitAndWaitAll()} della classe \texttt{BarrierImpl}.
+In questa implementazione l'ultimo worker che colpisce la barriera:
+\begin{itemize}
+	\item Risveglia tutti i worker che stanno attendendo.
+	\item Imposta un flag che viene utilizzato per azzerare il campo
+	che memorizza il numero di worker che hanno colpito la barriera.
+	Questo perché le barriere vengono riutilizzate a ogni iterazione.
+\end{itemize}
 
 \begin{figure}
 	\centering
@@ -170,29 +178,6 @@ public synchronized void hitAndWaitAll() throws InterruptedException {
 \label{chap:Descrizione del Comportamento del Sistema}
 %----------------------------------------------------------------------------------------
 
-Il Listato \ref{lst:lst2} presenta una descrizione di alto livello del
-comportamento del sistema proposto.
-//TODO: introdurre listato anche per SimulationManager
-Alle righe 6 e 11 tutti i flussi di esecuzione attendono finché l'ultimo non ha eseguito le istruzioni precedenti.
-
-\begin{lstlisting}[label=lst:lst2,caption=pseudocodice del programma parallelo]
-	/* virtual time */
-	vt = 0;
-	/* time increment at each iteration */     
-	dt  = 0.01;
-	Barrier barrier;
-	loop:
-		for each body b[i]:
-			compute total force exerted by other bodies b[j] and friction;
-			compute the instant acceleration, given the total force and mass;
-			update body velocity, given the acceleration and the virtual time elapsed dt;
-		barrier.hitAndWaitAll();
-		update bodies positions, given the velocity and virtual time elapsed dt;
-		check boundary collisions;
-		barrier.hitAndWaitAll();
-		vt = vt + dt;   
-		display current stage;
-\end{lstlisting}
 %----------------------------------------------------------------------------------------
 \chapter{Verifica delle Prestazioni} % possible chapter for Projects
 \label{chap:Verifica delle Prestazioni}
@@ -222,14 +207,17 @@ si possono trarre le seguenti conclusioni:
 	\item Per un numero di corpi sufficientemente piccolo (in questo caso 100),
 	il programma sequenziale impiega meno tempo di quello concorrente.
 	\item I valori proposti relativi al numero di corpi (100, 1000 e 5000) non sono sufficientemente elevati per
-	dimostrare che $N_{cpu}+1$ è il numero ottimale di thread da usare. Infatti, considerando il tempo di esecuzione
-	della simulazione con 5000 corpi e 1000 iterazioni, la differenza tra 9 e 17 thread è pressoché nulla.
+	dimostrare che $N_{cpu}+1$ è il numero ottimale di thread da usare. Infatti, considerando
+	le simulazioni con numero di corpi e iterazioni elevati, la differenza dei tempi di esecuzione tra 9 e 17 thread è pressoché nulla.
 \end{itemize}
 
+In Figura \ref{fig:speedup} viene presentato un grafico che riporta l'andamento dello speedup in funzione del numero di corpi e di thread.
+Nel migliore dei casi si ottiene uno speedup di poco superiore a 2.
 Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
 la differenza dei tempi di esecuzione diventa rilevante.
 I risultati dei test riportati nella tabella \ref{tab:table2} dimostrano effettivamente che
-il numero ottimale di thread da utilizzare è $N_{cpu} + 1$.
+il numero ottimale di thread da utilizzare è $N_{cpu} + 1$. In questo caso (forse a causa della semplicità del programma)
+un numero di thread elevato (99) non produce un overhead significativo.
 
 \begin{center}
 	\begin{table}
