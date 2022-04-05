@@ -14,7 +14,12 @@ public interface Controller extends ViewController {
     void setView(View view);
 
     /**
-     * start the simulation
+     * Start the simulation
      */
     void startSimulation();
+
+    /**
+     * Stop the simulation
+     */
+    void stopSimulation();
 }

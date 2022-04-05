@@ -17,4 +17,14 @@ public interface View {
      *
      */
     void display(List<Point2D> bodiesPositions, double virtualTime, long currentIteration, Boundary bounds);
+
+    /**
+     * Stop the simulation
+     */
+    void stopSimulation();
+
+    /**
+     * Start the simulation
+     */
+    void startSimulation();
 }

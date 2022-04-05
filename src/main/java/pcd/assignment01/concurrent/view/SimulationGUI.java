@@ -4,10 +4,7 @@ import pcd.assignment01.concurrent.util.Boundary;
 import pcd.assignment01.concurrent.util.Point2D;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.List;
 
 /**
@@ -15,14 +12,20 @@ import java.util.List;
  */
 public class SimulationGUI extends JFrame{
 
-    private final SimulationPanel panel;
+    private final SimulationPanel simulationPanel;
+    private static GraphicalView graphicalView;
 
-    public SimulationGUI(final int width, final int height){
+    public SimulationGUI(final int width, final int height, final GraphicalView graphicalView){
+        SimulationGUI.graphicalView = graphicalView;
         setTitle("Bodies Simulation");
         setSize(width, height);
         setResizable(false);
-        panel = new SimulationPanel(width, height);
-        getContentPane().add(panel);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        this.simulationPanel = new SimulationPanel(width, height);
+        ButtonsPanel buttonsPanel = new ButtonsPanel();
+        mainPanel.add(this.simulationPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonsPanel, BorderLayout.PAGE_START);
+        getContentPane().add(mainPanel);
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent ev){
                 System.exit(-1);
@@ -47,17 +50,35 @@ public class SimulationGUI extends JFrame{
                         final Boundary bounds){
         try {
             SwingUtilities.invokeAndWait(() -> {
-                panel.display(bodiesPositions, virtualTime, currentIteration, bounds);
+                simulationPanel.display(bodiesPositions, virtualTime, currentIteration, bounds);
                 repaint();
             });
         } catch (Exception ignored) {}
     }
 
-    public void updateScale(final double k) {
-        panel.updateScale(k);
+    public static class ButtonsPanel extends JPanel {
+        private final JButton buttonStart;
+        private final JButton buttonStop;
+
+        public ButtonsPanel() {
+            this.buttonStart = new JButton("Start");
+            this.buttonStop = new JButton("Stop");
+            this.buttonStop.setEnabled(false);
+            this.buttonStart.addActionListener(e -> {
+                ((JButton) e.getSource()).setEnabled(false);
+                this.buttonStop.setEnabled(true);
+                SimulationGUI.graphicalView.startSimulation();
+            });
+            this.buttonStop.addActionListener(e -> {
+                this.buttonStop.setEnabled(false);
+                SimulationGUI.graphicalView.stopSimulation();
+            });
+            this.add(buttonStart);
+            this.add(buttonStop);
+        }
     }
 
-    public static class SimulationPanel extends JPanel implements KeyListener {
+    public static class SimulationPanel extends JPanel implements KeyListener{
 
         private List<Point2D> bodiesPositions;
         private Boundary bounds;
@@ -69,14 +90,15 @@ public class SimulationGUI extends JFrame{
 
         public SimulationPanel(final int width, final int height){
             setSize(width,height);
-            dx = width / 2 - 20;
-            dy = height / 2 - 20;
+            this.dx = width / 2 - 20;
+            this.dy = height / 2 - 20;
             this.addKeyListener(this);
             setFocusable(true);
             setFocusTraversalKeysEnabled(false);
             requestFocusInWindow();
         }
 
+        @Override
         public void paint(Graphics g){
             if (bodiesPositions != null) {
                 Graphics2D g2 = (Graphics2D) g;
@@ -109,11 +131,11 @@ public class SimulationGUI extends JFrame{
         }
 
         private int getXcoord(double x) {
-            return (int)(dx + x*dx*scale);
+            return (int)(dx + x * dx * scale);
         }
 
         private int getYcoord(double y) {
-            return (int)(dy - y*dy*scale);
+            return (int)(dy - y * dy * scale);
         }
 
         public void display(List<Point2D> bodiesPositions, double vt, long iter, Boundary bounds){
@@ -123,20 +145,25 @@ public class SimulationGUI extends JFrame{
             this.currentIteration = iter;
         }
 
-        public void updateScale(double k) {
-            scale *= k;
+        private void zoomIn(){
+            scale *= 1.1;
+        }
+
+        private void zoomOut(){
+            scale *= 0.9;
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == 38){  		/* KEY UP */
-                scale *= 1.1;
+                this.zoomIn();
             } else if (e.getKeyCode() == 40){  	/* KEY DOWN */
-                scale *= 0.9;
+                this.zoomOut();
             }
         }
-
+        @Override
         public void keyReleased(KeyEvent e) {}
+        @Override
         public void keyTyped(KeyEvent e) {}
     }
 }
