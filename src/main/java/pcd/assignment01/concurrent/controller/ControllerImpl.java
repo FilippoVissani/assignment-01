@@ -9,22 +9,25 @@ import java.util.Optional;
  */
 public class ControllerImpl implements Controller{
     private final Model model;
-    private View view;
+    private Optional<View> view;
     private final SimulationManager simulationManager;
 
     public ControllerImpl(final Model model, final long iterations, final Optional<Integer> workersNumber) {
         this.model = model;
         this.simulationManager = new SimulationManager(model, this, iterations, workersNumber);
+        this.view = Optional.empty();
     }
 
     @Override
     public void setView(final View view) {
-        this.view = view;
+        this.view = Optional.of(view);
     }
 
     @Override
     public synchronized void updateView(long currentIteration){
-        view.display(model.getBodiesPositions(), model.getVirtualTime(), currentIteration, model.getBounds());
+        if (this.view.isPresent()){
+            view.get().display(model.getBodiesPositions(), model.getVirtualTime(), currentIteration, model.getBounds());
+        }
     }
 
     @Override
