@@ -212,6 +212,8 @@ L'interfaccia grafica dispone anche di due pulsanti, utilizzati per avviare e fe
 \chapter{Descrizione del Comportamento del Sistema} % possible chapter for Projects
 \label{chap:Descrizione del Comportamento del Sistema}
 %----------------------------------------------------------------------------------------
+Nei listati \ref{lst:worker} e \ref{lst:simulation_manager} vengono riportati i comportamenti del worker e del simulation manager rispettivamente.
+
 In Figura \ref{fig:petri-net} viene riportato il comportamento generale del simulation manager e di due worker (A e B) utilizzando 
 le reti di Petri.
 \begin{lstlisting}[label=lst:worker,caption=pseudocodice del worker]
@@ -394,5 +396,25 @@ un numero di thread elevato (99) non produce un overhead significativo.
 \chapter{Identificazione delle Proprietà di Correttezza} % possible chapter for Projects
 \label{chap:Identificazione delle Proprietà di Correttezza}
 %----------------------------------------------------------------------------------------
+Per verificare la correttezza del programma è stato utilizzato Java Pathfinder, un tool che esegue il model checking del programma per trovare eventuali problemi relativi alla concorrenza, quali deadlock e race condition.
+L’analisi del programma con JPF ha prodotto il risultato desiderato (Figura \ref{fig:jpf-test}), nessun errore è stato rilevato.
+
+\begin{lstlisting}[label=lst:jpf-file,caption=file JPF]
+	target = pcd.assignment01.concurrent.simulation.SimulationApp
+
+	classpath = build/classes/java/main
+	
+	listener = gov.nasa.jpf.listener.PreciseRaceDetector
+	
+	report.console.property_violation = error,trace
+\end{lstlisting}
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/jpf-test.png}
+	\caption{Risultato dell'esecuzione di JPF sul sistema}
+	\label{fig:jpf-test}
+\end{figure}
 
 \end{document}
