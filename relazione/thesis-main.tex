@@ -116,6 +116,9 @@ Portando il programma da sequenziale a parallelo devono essere considerati i seg
 	\item Gli eventi relativi alla pressione dei pulsanti
 	devono essere gestiti atomicamente, dato che si occupano di
 	avviare e fermare i flussi di esecuzione.
+	\item Al termine della simulazione, sia nel caso in cui sia stato raggiunto
+	il numero massimo di iterazioni, che nel caso in cui sia stato premuto il
+	pulsante Stop, tutti i flussi di esecuzione devono terminare correttamente.
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
@@ -131,8 +134,8 @@ La classe \texttt{SimulationManager}, che implementa l'interfaccia \texttt{Runna
 si occupa di generare i \texttt{Worker}, i quali a ogni iterazione
 calcolano la nuova posizione dei corpi.
 I \texttt{Worker} sono sincronizzati tra loro e con il \texttt{SimulationManager}
-grazie a due monitor di tipo barriera.
-Nel Listato \ref{lst:lst3} viene riportata l'implementazione del metodo \texttt{hitAndWaitAll()} della classe \texttt{BarrierImpl}.
+grazie a tre monitor di tipo barriera.
+Nel Listato \ref{lst:lst3} viene riportata l'implementazione del metodo \texttt{await()} della classe \texttt{BarrierImpl}.
 In questa implementazione l'ultimo worker che colpisce la barriera:
 \begin{itemize}
 	\item Risveglia tutti i worker che stanno attendendo.
