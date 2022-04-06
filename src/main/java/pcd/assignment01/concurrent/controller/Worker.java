@@ -31,10 +31,10 @@ public class Worker extends Thread {
             while (!stop){
                 List<Vector2D> acceleration = model.computeAccelerationOnBodiesRange(range);
                 this.model.updateSpeedOnBodiesRange(range, acceleration);
-                this.barriers.getStart().hitAndWaitAll();
+                this.barriers.getStart().await();
                 this.model.updatePositionOnBodiesRange(range);
                 this.model.checkAndSolveBoundaryCollisionOnBodiesRange(range);
-                this.barriers.getStop().hitAndWaitAll();
+                this.barriers.getStop().await();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

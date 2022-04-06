@@ -54,8 +54,8 @@ public class SimulationManager implements Runnable {
         this.chronometer.start();
         while (iteration < iterations && !this.stop) {
             try {
-                this.barriers.getStart().hitAndWaitAll();
-                this.barriers.getStop().hitAndWaitAll();
+                this.barriers.getStart().await();
+                this.barriers.getStop().await();
                 this.model.incrementVirtualTime();
                 this.controller.updateView(iteration);
                 iteration = iteration + 1;

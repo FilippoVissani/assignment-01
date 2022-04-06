@@ -18,7 +18,7 @@ public class BarrierImpl implements Barrier {
     }
 
     @Override
-    public synchronized void hitAndWaitAll() throws InterruptedException {
+    public synchronized void await() throws InterruptedException {
         this.actualWorkers = this.actualWorkers + 1;
         if (this.actualWorkers == this.workersNumber) {
             this.exit = true;
