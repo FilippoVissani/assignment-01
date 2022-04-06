@@ -7,7 +7,7 @@ import java.util.Optional;
 public class SimulationApp {
     public static void main(String[] args) {
         ModelImpl model = new ModelImpl(100);
-        ControllerImpl controller = new ControllerImpl(model, 1000, Optional.empty());
+        ControllerImpl controller = new ControllerImpl(model, 1000, Optional.of(1));
         controller.startSimulation();
     }
 }

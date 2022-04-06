@@ -32,7 +32,8 @@ public class SimulationManager implements Runnable {
         if (workersNumber.isPresent()){
             threadsNumber = workersNumber.get();
         }
-        this.barriers = new Pair<>(new BarrierImpl(threadsNumber + 1), new BarrierImpl(threadsNumber + 1));
+        this.barriers = new Pair<>(new BarrierImpl(threadsNumber + 1, false),
+                new BarrierImpl(threadsNumber + 1, false));
         this.workers = new HashSet<>();
         int range = model.getBodiesNumber() / threadsNumber;
         int last = 0;
@@ -76,5 +77,7 @@ public class SimulationManager implements Runnable {
         for(Worker worker : this.workers){
             worker.stopWorker();
         }
+        this.barriers.getStart().lowerBarrier();
+        this.barriers.getStop().lowerBarrier();
     }
 }

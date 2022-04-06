@@ -9,4 +9,6 @@ public interface Barrier {
      * @throws InterruptedException
      */
     void hitAndWaitAll() throws InterruptedException;
+
+    void lowerBarrier();
 }
