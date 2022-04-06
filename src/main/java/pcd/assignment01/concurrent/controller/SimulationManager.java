@@ -5,9 +5,8 @@ import pcd.assignment01.concurrent.controller.monitors.BarrierImpl;
 import pcd.assignment01.concurrent.model.Model;
 import pcd.assignment01.concurrent.util.Logger;
 import pcd.assignment01.concurrent.util.Pair;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Class used to manage the simulation
@@ -19,29 +18,31 @@ public class SimulationManager implements Runnable {
     private final ViewController controller;
     private final long iterations;
     private final Chronometer chronometer;
-    private final Pair<Barrier, Barrier> barriers;
-    private Boolean stop;
+    private final List<Barrier> barriers;
+    private final AtomicBoolean stop;
 
     public SimulationManager(final Model model, final ViewController controller, final long iterations, final Optional<Integer> workersNumber) {
         this.model = model;
         this.controller = controller;
         this.iterations = iterations;
         this.chronometer = new ChronometerImpl();
-        stop = false;
+        this.stop = new AtomicBoolean(false);
         int threadsNumber = Runtime.getRuntime().availableProcessors() + 1;
         if (workersNumber.isPresent()){
             threadsNumber = workersNumber.get();
         }
-        this.barriers = new Pair<>(new BarrierImpl(threadsNumber + 1, false),
-                new BarrierImpl(threadsNumber + 1, false));
+        this.barriers = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            this.barriers.add(new BarrierImpl(threadsNumber + 1));
+        }
         this.workers = new HashSet<>();
         int range = model.getBodiesNumber() / threadsNumber;
         int last = 0;
         for (int i = 0; i < threadsNumber - 1; i++){
             last = i * range + range;
-            this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last)));
+            this.workers.add(new Worker(barriers, model, new Pair<>(i * range, last), stop));
         }
-        this.workers.add(new Worker(barriers, model, new Pair<>(last, this.model.getBodiesNumber())));
+        this.workers.add(new Worker(barriers, model, new Pair<>(last, this.model.getBodiesNumber()), stop));
     }
 
     @Override
@@ -52,18 +53,21 @@ public class SimulationManager implements Runnable {
             worker.start();
         }
         this.chronometer.start();
-        while (iteration < iterations && !this.stop) {
+        while (!this.stop.get()) {
             try {
-                this.barriers.getStart().await();
-                this.barriers.getStop().await();
+                this.barriers.get(0).await();
+                this.barriers.get(1).await();
                 this.model.incrementVirtualTime();
                 this.controller.updateView(iteration);
                 iteration = iteration + 1;
+                if (!(iteration < iterations)){
+                    this.stop.set(true);
+                }
+                this.barriers.get(2).await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        this.stopSimulation();
         this.chronometer.stop();
         Logger.logSimulationResult(model.getBodiesPositions().size(),
                 iterations,
@@ -73,11 +77,6 @@ public class SimulationManager implements Runnable {
     }
 
     public synchronized void stopSimulation() {
-        this.stop = true;
-        for(Worker worker : this.workers){
-            worker.stopWorker();
-        }
-        this.barriers.getStart().lowerBarrier();
-        this.barriers.getStop().lowerBarrier();
+        this.stop.set(true);
     }
 }

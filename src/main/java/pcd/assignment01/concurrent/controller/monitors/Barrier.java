@@ -9,6 +9,4 @@ public interface Barrier {
      * @throws InterruptedException
      */
     void await() throws InterruptedException;
-
-    void lowerBarrier();
 }
