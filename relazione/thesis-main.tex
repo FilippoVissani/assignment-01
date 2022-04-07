@@ -47,7 +47,7 @@ soggetti a due tipi di forze:
 Il programma è sequenziale, non strutturato. 
 L'algoritmo \ref{lst:lst1} definisce il comportamento del simulatore in pseudo codice.
 \newpage
-\begin{lstlisting}[label=lst:lst1,caption=pseudocodice del programma sequenziale]
+\begin{lstlisting}[label=lst:lst1,caption=Pseudocodice del programma sequenziale]
 /* virtual time */
 vt = 0;
 /* time increment at each iteration */     
@@ -216,7 +216,7 @@ Nei listati \ref{lst:worker} e \ref{lst:simulation_manager} vengono riportati i 
 
 In Figura \ref{fig:petri-net} viene riportato il comportamento generale del simulation manager e di due worker (A e B) utilizzando 
 le reti di Petri.
-\begin{lstlisting}[label=lst:worker,caption=pseudocodice del worker]
+\begin{lstlisting}[label=lst:worker,caption=Pseudocodice del worker]
 		while(!stop):
 (P,Q)0:		update bodies speed
 (P,Q)1:		barrier0.await()
@@ -226,7 +226,7 @@ le reti di Petri.
 (P,Q)5:		barrier2.await()
 \end{lstlisting}
 
-\begin{lstlisting}[label=lst:simulation_manager,caption=pseudocodice del simulation manager]
+\begin{lstlisting}[label=lst:simulation_manager,caption=Pseudocodice del simulation manager]
 		while(!stop):
 R0:			barrier0.await()
 R1:			barrier1.await()
@@ -263,7 +263,7 @@ Descrizione dettagliata del processore:
 	\item Cache L3: 8MB
 \end{itemize}
 
-Osservando i dati riportati nella tabella \ref{tab:table1}
+Osservando i dati riportati nella Tabella \ref{tab:table1}
 si possono trarre le seguenti conclusioni:
 \begin{itemize}
 	\item Per un numero di corpi sufficientemente piccolo (in questo caso 100),
@@ -274,96 +274,97 @@ si possono trarre le seguenti conclusioni:
 \end{itemize}
 
 In Figura \ref{fig:speedup} viene presentato un grafico che riporta l'andamento dello speedup in funzione del numero di corpi e di thread.
-Nel migliore dei casi si ottiene uno speedup di poco superiore a 2.
+Nel migliore dei casi lo speedup è 2.
 Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
 la differenza dei tempi di esecuzione diventa rilevante.
-I risultati dei test riportati nella tabella \ref{tab:table2} dimostrano effettivamente che
-il numero ottimale di thread da utilizzare è $N_{cpu} + 1$. In questo caso (forse a causa della semplicità del programma)
-un numero di thread elevato (99) non produce un overhead significativo.
 
-\begin{center}
-	\begin{table}
-		\begin{tabular}{ |c|c|c|c|c|c| } 
-			\hline
-			Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
-			\hline
-			0 & 100 & 1000 & 1 & 165 & 1.0 \\ 
-			\hline
-		   1 & 100 & 1000 & 9 & 165 & 1.0 \\ 
-			\hline
-		   2 & 100 & 1000 & 17 & 393 & 0.42 \\ 
-			\hline
-		   3 & 100 & 1000 & 99 & 2414 & 0.07 \\ 
-			\hline
-		   4 & 100 & 10000 & 1 & 1140 & 1.0 \\ 
-			\hline
-		   5 & 100 & 10000 & 9 & 2666 & 0.43 \\ 
-			\hline
-		   6 & 100 & 10000 & 17 & 4737 & 0.24 \\ 
-			\hline
-		   7 & 100 & 10000 & 99 & 24731 & 0.05 \\ 
-			\hline
-		   8 & 100 & 50000 & 1 & 5612 & 1.0 \\ 
-			\hline
-		   9 & 100 & 50000 & 9 & 13653 & 0.41 \\ 
-			\hline
-		   10 & 100 & 50000 & 17 & 23923 & 0.23 \\ 
-			\hline
-		   11 & 100 & 50000 & 99 & 123088 & 0.05 \\ 
-			\hline
-		   12 & 1000 & 1000 & 1 & 8387 & 1.0 \\ 
-			\hline
-		   13 & 1000 & 1000 & 9 & 4131 & 2.03 \\ 
-			\hline
-		   14 & 1000 & 1000 & 17 & 4552 & 1.84 \\ 
-			\hline
-		   15 & 1000 & 1000 & 99 & 4727 & 1.77 \\ 
-			\hline
-		   16 & 1000 & 10000 & 1 & 82887 & 1.0 \\ 
-			\hline
-		   17 & 1000 & 10000 & 9 & 40312 & 2.06 \\ 
-			\hline
-		   18 & 1000 & 10000 & 17 & 44382 & 1.87 \\ 
-			\hline
-		   19 & 1000 & 10000 & 99 & 46137 & 1.8 \\ 
-			\hline
-		   20 & 1000 & 50000 & 1 & 413746 & 1.0 \\ 
-			\hline
-		   21 & 1000 & 50000 & 9 & 210688 & 1.96 \\ 
-			\hline
-		   22 & 1000 & 50000 & 17 & 229109 & 1.81 \\ 
-			\hline
-		   23 & 1000 & 50000 & 99 & 234906 & 1.76 \\ 
-			\hline
-		   24 & 5000 & 1000 & 1 & 183813 & 1.0 \\ 
-			\hline
-		   25 & 5000 & 1000 & 9 & 103834 & 1.77 \\ 
-			\hline
-		   26 & 5000 & 1000 & 17 & 102516 & 1.79 \\ 
-			\hline
-		   27 & 5000 & 1000 & 99 & 102355 & 1.8 \\ 
-			\hline
-		   28 & 5000 & 10000 & 1 & 1971397 & 1.0 \\ 
-			\hline
-		   29 & 5000 & 10000 & 9 & 1017581 & 1.94 \\ 
-			\hline
-		   30 & 5000 & 10000 & 17 & 1008593 & 1.95 \\ 
-			\hline
-		   31 & 5000 & 10000 & 99 & 1023304 & 1.93 \\ 
-			\hline
-		   32 & 5000 & 50000 & 1 & 10207974 & 1.0 \\ 
-			\hline
-		   33 & 5000 & 50000 & 9 & 5046146 & 2.02 \\ 
-			\hline
-		   34 & 5000 & 50000 & 17 & 5029016 & 2.03 \\ 
-			\hline
-		   35 & 5000 & 50000 & 99 & 5148153 & 1.98 \\ 
-			\hline
-		\end{tabular}
-		\label{tab:table1}
-		\caption{Risultati dei test}
-	\end{table}
-\end{center}
+I risultati dei test riportati in Tabella \ref{tab:table2} dimostrano effettivamente che
+il numero ottimale di thread da utilizzare è $N_{cpu} + 1$, infatti c'è una differenza notevole tra le simulazioni con 9 e con 17 thread. 
+In questo caso, la simulazione con un numero di thread elevato (99) risulta più veloce di quella con il numero ottimale di thread, anche se di poco.
+Questo, probabilmente, a causa della semplicità del programma.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c|c|c| } 
+		\hline
+		Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
+		\hline
+		0 & 100 & 1000 & 1 & 157 & 1.0 \\ 
+		\hline
+		1 & 100 & 1000 & 9 & 201 & 0.78 \\ 
+		\hline
+		2 & 100 & 1000 & 17 & 600 & 0.26 \\ 
+		\hline
+		3 & 100 & 1000 & 99 & 3567 & 0.04 \\ 
+		\hline
+		4 & 100 & 10000 & 1 & 1171 & 1.0 \\ 
+		\hline
+		5 & 100 & 10000 & 9 & 3618 & 0.32 \\ 
+		\hline
+		6 & 100 & 10000 & 17 & 6582 & 0.18 \\ 
+		\hline
+		7 & 100 & 10000 & 99 & 33952 & 0.03 \\ 
+		\hline
+		8 & 100 & 50000 & 1 & 5283 & 1.0 \\ 
+		\hline
+		9 & 100 & 50000 & 9 & 13822 & 0.38 \\ 
+		\hline
+		10 & 100 & 50000 & 17 & 32673 & 0.16 \\ 
+		\hline
+		11 & 100 & 50000 & 99 & 167340 & 0.03 \\ 
+		\hline
+		12 & 1000 & 1000 & 1 & 8296 & 1.0 \\ 
+		\hline
+		13 & 1000 & 1000 & 9 & 4324 & 1.92 \\ 
+		\hline
+		14 & 1000 & 1000 & 17 & 4773 & 1.74 \\ 
+		\hline
+		15 & 1000 & 1000 & 99 & 5174 & 1.6 \\ 
+		\hline
+		16 & 1000 & 10000 & 1 & 82545 & 1.0 \\ 
+		\hline
+		17 & 1000 & 10000 & 9 & 42564 & 1.94 \\ 
+		\hline
+		18 & 1000 & 10000 & 17 & 47085 & 1.75 \\ 
+		\hline
+		19 & 1000 & 10000 & 99 & 52254 & 1.58 \\ 
+		\hline
+		20 & 1000 & 50000 & 1 & 413015 & 1.0 \\ 
+		\hline
+		21 & 1000 & 50000 & 9 & 218415 & 1.89 \\ 
+		\hline
+		22 & 1000 & 50000 & 17 & 244789 & 1.69 \\ 
+		\hline
+		23 & 1000 & 50000 & 99 & 270243 & 1.53 \\ 
+		\hline
+		24 & 5000 & 1000 & 1 & 182638 & 1.0 \\ 
+		\hline
+		25 & 5000 & 1000 & 9 & 104925 & 1.74 \\ 
+		\hline
+		26 & 5000 & 1000 & 17 & 103332 & 1.77 \\ 
+		\hline
+		27 & 5000 & 1000 & 99 & 105752 & 1.73 \\ 
+		\hline
+		28 & 5000 & 10000 & 1 & 1925941 & 1.0 \\ 
+		\hline
+		29 & 5000 & 10000 & 9 & 1033744 & 1.86 \\ 
+		\hline
+		30 & 5000 & 10000 & 17 & 1028930 & 1.87 \\ 
+		\hline
+		31 & 5000 & 10000 & 99 & 1067935 & 1.8 \\ 
+		\hline
+		32 & 5000 & 50000 & 1 & 10226313 & 1.0 \\ 
+		\hline
+		33 & 5000 & 50000 & 9 & 5163395 & 1.98 \\ 
+		\hline
+		34 & 5000 & 50000 & 17 & 5115270 & 2.0 \\ 
+		\hline
+		35 & 5000 & 50000 & 99 & 5311090 & 1.93 \\ 
+		\hline
+	\end{tabular}
+	\caption{Risultati dei test}
+	\label{tab:table1}
+\end{table}
 
 \begin{figure}
 	\centering
@@ -372,34 +373,35 @@ un numero di thread elevato (99) non produce un overhead significativo.
 	\label{fig:speedup}
 \end{figure}
 
-\begin{center}
-	\begin{table}
-		\begin{tabular}{ |c|c|c|c|c|c| } 
-			\hline
-				Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
-			\hline
-		   36 & 50000 & 100 & 1 & 7588885 & 1.0 \\ 
-			\hline
-		   37 & 50000 & 100 & 9 & 1595651 & 4.76 \\ 
-			\hline
-		   38 & 50000 & 100 & 17 & 1275306 & 5.95 \\ 
-			\hline
-		   39 & 50000 & 100 & 99 & 1276354 & 5.95 \\ 
-			\hline
-		\end{tabular}
-		\label{tab:table2}
-		\caption{Risultati dei test}
-	\end{table}
-\end{center}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c|c|c|c| } 
+		\hline
+			Numero test & Corpi & Iterazioni & Thread & Tempo esecuzione (ms) & Speedup \\
+		\hline
+		36 & 50000 & 100 & 1 & 7602654 & 1.0 \\ 
+		\hline
+		37 & 50000 & 100 & 9 & 1596103 & 4.76 \\ 
+		\hline
+		38 & 50000 & 100 & 17 & 1326848 & 5.73 \\ 
+		\hline
+		39 & 50000 & 100 & 99 & 1285153 & 5.92 \\ 
+		\hline
+	\end{tabular}
+	\caption{Risultati dei test}
+	\label{tab:table2}
+\end{table}
 
 %----------------------------------------------------------------------------------------
 \chapter{Identificazione delle Proprietà di Correttezza} % possible chapter for Projects
 \label{chap:Identificazione delle Proprietà di Correttezza}
 %----------------------------------------------------------------------------------------
-Per verificare la correttezza del programma è stato utilizzato Java Pathfinder, un tool che esegue il model checking del programma per trovare eventuali problemi relativi alla concorrenza, quali deadlock e race condition.
-L’analisi del programma con JPF ha prodotto il risultato desiderato (Figura \ref{fig:jpf-test}), nessun errore è stato rilevato.
+Per verificare la correttezza del programma è stato utilizzato Java Path Finder,
+un tool che esegue il model checking del programma per trovare eventuali problemi relativi alla concorrenza,
+quali deadlock e race condition.
+L'analisi del programma con JPF ha prodotto il risultato desiderato (Figura \ref{fig:jpf-test}), nessun errore è stato rilevato.
 
-\begin{lstlisting}[label=lst:jpf-file,caption=file JPF]
+\begin{lstlisting}[label=lst:jpf-file,caption=File JPF]
 	target = pcd.assignment01.concurrent.simulation.SimulationApp
 
 	classpath = build/classes/java/main
