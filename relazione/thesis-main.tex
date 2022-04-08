@@ -151,11 +151,11 @@ calcolano la nuova posizione dei corpi.
 I \texttt{Worker} sono sincronizzati tra loro e con il \texttt{SimulationManager}
 grazie a tre monitor di tipo barriera.
 Nel Listato \ref{lst:lst3} viene riportata l'implementazione del metodo \texttt{await()} della classe \texttt{BarrierImpl}.
-In questa implementazione l'ultimo worker che colpisce la barriera:
+In questa implementazione l'ultimo thread che colpisce la barriera:
 \begin{itemize}
-	\item Risveglia tutti i worker che stanno attendendo.
+	\item Risveglia tutti i thread che stanno attendendo.
 	\item Imposta un flag che viene utilizzato per azzerare il campo
-	che memorizza il numero di worker che hanno colpito la barriera.
+	che memorizza il numero di thread che hanno colpito la barriera.
 	Questo perché le barriere vengono riutilizzate a ogni iterazione.
 \end{itemize}
 
@@ -174,7 +174,7 @@ Inoltre il \textit{Controller} si occupa di aggiornare la \textit{View} ad ogni 
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{figures/simulation-manager.png}
-	\caption{Simulation manager: diagramma delle classi.}
+	\caption{Controller: diagramma delle classi.}
 	\label{fig:SimulatioManager}
 \end{figure}
 
@@ -293,6 +293,7 @@ si possono trarre le seguenti conclusioni:
 \end{itemize}
 
 In Figura \ref{fig:speedup} viene presentato un grafico che riporta l'andamento dello speedup in funzione del numero di corpi e di thread.
+
 Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
 la differenza dei tempi di esecuzione diventa rilevante.
 I risultati dei test riportati in Tabella \ref{tab:table2} dimostrano effettivamente che
