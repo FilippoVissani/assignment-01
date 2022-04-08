@@ -216,6 +216,24 @@ Nei listati \ref{lst:worker} e \ref{lst:simulation_manager} vengono riportati i 
 
 In Figura \ref{fig:petri-net} viene riportato il comportamento generale del simulation manager e di due worker (A e B) utilizzando 
 le reti di Petri.
+
+Vengono utilizzate tre barriere condivise tra il simulation manager e i worker:
+\begin{enumerate}
+	\item Inizialmente il simulation manager attende che i worker
+	abbiano terminato di aggiornare le posizioni dei corpi
+	e verificato le collisioni (istruzioni: R0 e R1).
+	\item A ogni iterazione i worker prima aggiornano la velocità dei corpi,
+	poi incontrano la prima barriera (istruzioni:P,Q 1).
+	\item Dopo aver passato la prima barriera i worker aggiornano la posizione dei corpi,
+	eseguono il controllo delle collisioni e incontrano la seconda barriera (istruzioni:P,Q 4).
+	\item A questo punto i worker attendono nella terza barriera (istruzioni:P,Q 5) mentre il simulation
+	manager aggiorna l'interfaccia grafica.
+	\item Dopo l'aggiornamento dell'interfaccia grafica il simulation manager incontra
+	la terza barriera (istruzione: R3) e inizia una nuova iterazione.
+
+\newpage
+
+\end{enumerate}
 \begin{lstlisting}[label=lst:worker,caption=Pseudocodice del worker]
 		while(!stop):
 (P,Q)0:		update bodies speed
@@ -236,7 +254,7 @@ R3:			barrier2.await()
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\linewidth]{figures/petri-net.png}
+	\includegraphics[width=0.7\linewidth]{figures/petri-net.png}
 	\caption{Rete di Petri.}
 	\label{fig:petri-net}
 \end{figure}
@@ -268,20 +286,18 @@ si possono trarre le seguenti conclusioni:
 \begin{itemize}
 	\item Per un numero di corpi sufficientemente piccolo (in questo caso 100),
 	il programma sequenziale impiega meno tempo di quello concorrente.
-	\item I valori proposti relativi al numero di corpi (100, 1000 e 5000) non sono sufficientemente elevati per
-	dimostrare che $N_{cpu}+1$ è il numero ottimale di thread da usare. Infatti, considerando
-	le simulazioni con numero di corpi e iterazioni elevati, la differenza dei tempi di esecuzione tra 9 e 17 thread è pressoché nulla.
+	\item $N_{cpu}+1$ risulta essere il numero ottimale di thread da utilizzare
+	solo con un numero elevato di corpi. In ogni caso prestazioni simili possono essere raggiunte anche con meno thread (9).
+	Le simulazioni con numero di corpi e iterazioni elevati, la differenza dei tempi di esecuzione tra 9 e 17 thread è minima.
+	\item Impiegare un numero elevato di thread non porta a un incremento significativo delle prestazioni, al contrario, genera overhead.
 \end{itemize}
 
 In Figura \ref{fig:speedup} viene presentato un grafico che riporta l'andamento dello speedup in funzione del numero di corpi e di thread.
-Nel migliore dei casi lo speedup è 2.
 Aumentando notevolmente il numero di corpi (50000), anche con un numero basso di iterazioni,
 la differenza dei tempi di esecuzione diventa rilevante.
-
 I risultati dei test riportati in Tabella \ref{tab:table2} dimostrano effettivamente che
 il numero ottimale di thread da utilizzare è $N_{cpu} + 1$, infatti c'è una differenza notevole tra le simulazioni con 9 e con 17 thread. 
 In questo caso, la simulazione con un numero di thread elevato (99) risulta più veloce di quella con il numero ottimale di thread, anche se di poco.
-Questo, probabilmente, a causa della semplicità del programma.
 
 \begin{table}[h!]
 	\centering
@@ -368,7 +384,7 @@ Questo, probabilmente, a causa della semplicità del programma.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=\linewidth]{figures/speedup-plot.png}
+	\includegraphics[width=0.9\linewidth]{figures/speedup-plot.png}
 	\caption{Speedup in funzione del numero di thread e di corpi (con numero di iterazioni fissato a 50000).}
 	\label{fig:speedup}
 \end{figure}
